@@ -1,0 +1,33 @@
+name: GitHub Actions Demo
+run-name: 👹 ${{ github.actor }} is testing out GitHub Actions 👹
+
+on: [push]
+
+jobs:
+  TestJob:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Step 1 / Print"
+        run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event 🎉"
+      
+      - name: "Step 2 / Print"
+        run: echo "🐧 This job is now running on a ${{ runner.os }} server hoster by GitHub 🐧"
+
+      - name: "Step 3 / Print"
+        run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }} 🔎"
+
+      - name: "Step 4 / Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Step 5 / Print"
+        run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner 💡"
+
+      - name: "Step 6 / Print"
+        run: echo "🖥️ The workflow is now ready to test your code on the runner 🖥️"
+
+      - name: "Step 7 / List files in the repository"
+        run: |
+          ls ${{ github.workspace }}
+
+      - name: "Step 8 / Print"
+        run: echo "🍏 This job's status is ${{ job.status }}."
