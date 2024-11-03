@@ -23,7 +23,11 @@ jobs:
         run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner 💡"
 
       - name: "Step 6 / Print"
-        run: echo "🖥️ The workflow is now ready to test your code on the runner 🖥️"
+        run: |
+          echo "🖥️ The workflow is now ready to test your code on the runner 🖥️"
+          echo "Scratch Org Username: some_username" >> $GITHUB_STEP_SUMMARY
+          echo "Scratch Org Password: some_password" >> $GITHUB_STEP_SUMMARY
+          echo "Scratch Org URL: some_url" >> $GITHUB_STEP_SUMMARY
 
       - name: "Step 7 / List files in the repository"
         run: |
