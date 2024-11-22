@@ -25,5 +25,8 @@ jobs:
         name: "Create Scratch Org"
 
         steps:
-            - name: "Test Step"
-              run: echo "This is a test step"
+            - name: "Test Step #1"
+              run: echo "This is a test step 1"
+            
+            - name: "Test Step #2"
+              run: echo "This is a test step 2"
