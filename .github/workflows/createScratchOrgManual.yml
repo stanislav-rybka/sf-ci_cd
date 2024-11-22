@@ -26,7 +26,4 @@ jobs:
 
         steps:
             - name: "Test Step #1"
-              run: echo "This is a test step 1"
-            
-            - name: "Test Step #2"
-              run: echo "This is a test step 2"
+              run: echo "Selected number of duration in days - ${{ inputs.durationInDays }}"
