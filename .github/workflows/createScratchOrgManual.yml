@@ -30,6 +30,9 @@ jobs:
             - name: "Test Step #1"
               run: echo "Selected number of duration in days - ${{ inputs.durationInDays }}"
 
+            - name: "Checkout code"
+              uses: actions/checkout@v4
+
             - name: "Initialize"
               uses: ./.github/actions/init
 
