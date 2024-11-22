@@ -1,0 +1,14 @@
+name: "Create Scratch Org"
+
+on:
+    workflow_dispatch:
+
+jobs:
+    Job_CreateScratchOrg:
+        runs-on: ubuntu-latest
+        
+        name: "Create Scratch Org"
+
+        steps:
+            - name: "Test Step"
+              run: echo "This is a test step"
