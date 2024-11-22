@@ -10,8 +10,14 @@ runs:
     using: "composite"
     
     steps:
-        - name: "Test npm"
+        - name: "Print node / npm versions"
           shell: bash
           run: |
+            echo "Checking node version..."
             node --version
+
+            echo "Checking npm version..."
             npm --version
+
+        - name: "Install sfdx with npm"
+          run: npm install @salesforce/cli --global --loglevel verbose
