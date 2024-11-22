@@ -11,4 +11,6 @@ runs:
     
     steps:
         - name: "Test npm"
-          run: npm --version
+          run: |
+            node --version
+            npm --version
