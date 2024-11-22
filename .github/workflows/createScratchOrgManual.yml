@@ -2,6 +2,21 @@ name: "Create Scratch Org"
 
 on:
     workflow_dispatch:
+        inputs:
+            durationInDays:
+                description: "Number of days for scratch org to expire after"
+                required: true
+                type: choice
+                options:
+                    - 1
+                    - 2
+                    - 3
+                    - 5
+                    - 7
+                    - 10
+                    - 15
+                    - 20
+                    - 30
 
 jobs:
     Job_CreateScratchOrg:
