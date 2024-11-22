@@ -36,5 +36,5 @@ jobs:
             - name: "Initialize"
               uses: ./.github/actions/init
 
-            - name: "Print files"
-              run: ls -l
+            - name: "Print sfdx version"
+              run: sfdx --version
