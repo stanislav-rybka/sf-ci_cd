@@ -1,0 +1,14 @@
+name: Initialization
+
+inputs:
+    useCache:
+        description: Use cache?
+        type: boolean
+        default: true
+
+runs:
+    using: "composite"
+    
+    steps:
+        - name: "Checkout code"
+          uses: actions/checkout@v4
