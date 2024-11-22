@@ -20,4 +20,5 @@ runs:
             npm --version
 
         - name: "Install sfdx with npm"
+          shell: bash
           run: npm install @salesforce/cli --global --loglevel verbose
