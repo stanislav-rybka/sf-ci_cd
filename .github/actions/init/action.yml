@@ -10,6 +10,19 @@ runs:
     using: "composite"
     
     steps:
+        - name: "Print npm files"
+          shell: bash
+          run: ls "~/.npm/" -l
+        
+        - if: ${{ inputs.useCache == 'true' }}
+          name: "Configure npm cache"
+          uses: actions/cache@v3
+          with:
+            path: ~/.npm
+            key: npm-${{ runner.os }}-${{ hashFiles('**/package.json') }}
+            restore-keys: |
+              npm-${{ runner.os }}
+
         - name: "Print node / npm versions"
           shell: bash
           run: |
