@@ -23,10 +23,25 @@ runs:
     - shell: bash
       continue-on-error: false
       env:
+          TARGET_ORG_URL: ${{ inputs.targetOrgUrl }}
+          TARGET_ORG_USERNAME: ${{ inputs.targetOrgUsername }}
+          TARGET_ORG_PASSWORD: ${{ inputs.targetOrgPassword }}
           TARGET_ORG_ALIAS: "targetOrg"
       run: |
-        echo "Target Org URL: ${{ inputs.targetOrgUrl }}"
-        echo "Target Org Username: ${{ inputs.targetOrgUsername }}"
-        echo "Target Org Password: ${{ inputs.targetOrgPassword }}"
+        echo "Target Org URL: $TARGET_ORG_URL"
+        echo "Target Org Username: $TARGET_ORG_USERNAME"
+        echo "Target Org Password: $TARGET_ORG_PASSWORD"
+
+        if [[ ! ${TARGET_ORG_USERNAME:+1} || ! ${TARGET_ORG_PASSWORD:+1} || ! ${TARGET_ORG_URL:+1} ]] ; then
+          echo "❌ Target environment credentials are not completely provided. Cannot continue the deployment process"
+          exit 1;
+        fi
+
+
+        echo "⏳ Authorizing to the target environment..."
+
+        DX_AUTH_RESPONSE=$(sf sfpowerkit:auth:login -a "$TARGET_ORG_ALIAS" -u "${TARGET_ORG_USERNAME,,}" -p "${TARGET_ORG_PASSWORD}" -r "${TARGET_ORG_URL}" --json);
+        DX_STATUS_CODE=$(echo "$DX_AUTH_RESPONSE" | jq .status);
+
 
         echo "⏳ Deploying metadata..."
