@@ -2,39 +2,39 @@ name: "Create Scratch Org Manual"
 run-name: "Create Scratch Org Manual (${{ github.actor }})"
 
 on:
-    workflow_dispatch:
-        inputs:
-            durationInDays:
-                description: "Number of days for scratch org to expire after"
-                required: true
-                type: choice
-                default: '5'
-                options:
-                    - 1
-                    - 2
-                    - 3
-                    - 5
-                    - 7
-                    - 10
-                    - 15
-                    - 20
-                    - 30
+  workflow_dispatch:
+    inputs:
+      durationInDays:
+        description: "Number of days for scratch org to expire after"
+        required: true
+        type: choice
+        default: '5'
+        options:
+          - 1
+          - 2
+          - 3
+          - 5
+          - 7
+          - 10
+          - 15
+          - 20
+          - 30
 
 jobs:
-    Job_CreateScratchOrg:
-        runs-on: ubuntu-latest
-        
-        name: "Create Scratch Org"
-
-        steps:
-            - name: "Checkout code"
-              uses: actions/checkout@v4
-
-            - name: "Initialize"
-              uses: ./.github/actions/init
-
-            - name: "Create Scratch Org"
-              uses: ./.github/actions/createScratchOrg
-              with:
-                devHubOrgSfdxUrl: ${{ secrets.DEVHUB_ORG_SFDX_URL }}
-                durationInDays: ${{ inputs.durationInDays }}
+  CreateScratchOrg:
+    runs-on: ubuntu-latest
+    
+    name: "Create Scratch Org"
+    
+    steps:
+      - name: "Checkout code"
+        uses: actions/checkout@v4
+      
+      - name: "Initialize"
+        uses: ./.github/actions/init
+      
+      - name: "Create Scratch Org"
+        uses: ./.github/actions/createScratchOrg
+        with:
+          devHubOrgSfdxUrl: ${{ secrets.DEVHUB_ORG_SFDX_URL }}
+          durationInDays: ${{ inputs.durationInDays }}

@@ -1,33 +1,33 @@
 name: "Initialization"
 
 inputs:
-    useCache:
-        description: Use cache?
-        type: boolean
-        default: true
+  useCache:
+    description: Use cache?
+    type: boolean
+    default: true
 
 runs:
-    using: "composite"
+  using: "composite"
     
-    steps:
-        - if: ${{ inputs.useCache == 'true' }}
-          name: "Configure npm cache"
-          uses: actions/cache@v3
-          with:
-            path: ~/.npm
-            key: npm-${{ runner.os }}-${{ hashFiles('**/package.json') }}
-            restore-keys: |
-              npm-${{ runner.os }}
+  steps:
+    - if: ${{ inputs.useCache == 'true' }}
+      name: "Configure npm cache"
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: npm-${{ runner.os }}-${{ hashFiles('**/package.json') }}
+        restore-keys: |
+          npm-${{ runner.os }}
 
-        - name: "Print node / npm versions"
-          shell: bash
-          run: |
-            echo "Checking node version..."
-            node --version
+    - name: "Print node / npm versions"
+      shell: bash
+      run: |
+        echo "Checking node version..."
+        node --version
 
-            echo "Checking npm version..."
-            npm --version
+        echo "Checking npm version..."
+        npm --version
 
-        - name: "Install sfdx with npm"
-          shell: bash
-          run: npm install @salesforce/cli --global
+    - name: "Install sfdx with npm"
+      shell: bash
+      run: npm install @salesforce/cli --global

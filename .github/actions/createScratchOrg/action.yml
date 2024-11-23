@@ -1,113 +1,113 @@
 name: "Create Scratch Org"
 
 inputs:
-    devHubOrgSfdxUrl:
-        description: "DevHub environment SFDX URL"
-        type: string
-        required: true
+  devHubOrgSfdxUrl:
+    description: "DevHub environment SFDX URL"
+    type: string
+    required: true
 
-    configFilePath:
-        description: "Relative path to a scratch org configuration file"
-        type: string
-        default: "config/project-scratch-def.json"
+  configFilePath:
+    description: "Relative path to a scratch org configuration file"
+    type: string
+    default: "config/project-scratch-def.json"
 
-    durationInDays:
-        description: "Number of days for scratch org to expire after"
-        required: true
-        type: choice
-        default: '5'
-        options:
-            - 1
-            - 2
-            - 3
-            - 5
-            - 7
-            - 10
-            - 15
-            - 20
-            - 30
+  durationInDays:
+    description: "Number of days for scratch org to expire after"
+    required: true
+    type: choice
+    default: '5'
+    options:
+      - 1
+      - 2
+      - 3
+      - 5
+      - 7
+      - 10
+      - 15
+      - 20
+      - 30
 
 outputs:
-    scratchOrgUsername:
-        description: "Username of the created scratch org"
+  scratchOrgUsername:
+    description: "Username of the created scratch org"
 
-    scratchOrgPassword:
-        description: "Password of the created scratch org"
+  scratchOrgPassword:
+    description: "Password of the created scratch org"
 
-    scratchOrgUrl:
-        description: "Login URL of the created scratch org"
+  scratchOrgUrl:
+    description: "Login URL of the created scratch org"
 
 runs:
-    using: "composite"
+  using: "composite"
 
-    steps:
-        - shell: bash
-          continue-on-error: false
-          env:
-              DEVHUB_ORG_SFDX_URL: ${{ inputs.devHubOrgSfdxUrl }}
-              DEVHUB_ORG_ALIAS: "devHub"
-              SCRATCH_ORG_CONFIG_FILE_PATH: ${{ inputs.configFilePath }}
-              SCRATCH_ORG_ALIAS: "scratchOrg"
-          run: |
-            echo "⏳ Authorizing to the DevHub environment..."
+  steps:
+    - shell: bash
+      continue-on-error: false
+      env:
+          DEVHUB_ORG_SFDX_URL: ${{ inputs.devHubOrgSfdxUrl }}
+          DEVHUB_ORG_ALIAS: "devHub"
+          SCRATCH_ORG_CONFIG_FILE_PATH: ${{ inputs.configFilePath }}
+          SCRATCH_ORG_ALIAS: "scratchOrg"
+      run: |
+        echo "⏳ Authorizing to the DevHub environment..."
 
-            DX_AUTH_RESPONSE=$(echo $DEVHUB_ORG_SFDX_URL | sf org login sfdx-url --sfdx-url-stdin --json -a "$DEVHUB_ORG_ALIAS");
-            DX_STATUS_CODE=$(echo $DX_AUTH_RESPONSE | jq .status);
+        DX_AUTH_RESPONSE=$(echo $DEVHUB_ORG_SFDX_URL | sf org login sfdx-url --sfdx-url-stdin --json -a "$DEVHUB_ORG_ALIAS");
+        DX_STATUS_CODE=$(echo $DX_AUTH_RESPONSE | jq .status);
 
-            # early exit - error when authorizing to DevHub
-            if [[ "$DX_STATUS_CODE" != "0" ]]; then
-              echo "❌ Cannot log in to DevHub"
-              exit 1
-            fi
+        # early exit - error when authorizing to DevHub
+        if [[ "$DX_STATUS_CODE" != "0" ]]; then
+          echo "❌ Cannot log in to DevHub"
+          exit 1
+        fi
 
-            echo "✅ Successfully authorized to the DevHub environment"
-
-
-            echo "⏳ Creating a scratch org..."
-            echo "Target scratch org configuration file: ${SCRATCH_ORG_CONFIG_FILE_PATH}"
-            cat $SCRATCH_ORG_CONFIG_FILE_PATH
-
-            SCRATCH_ORG_CREATION_RESPONSE=$(sf org create scratch -f "$SCRATCH_ORG_CONFIG_FILE_PATH" -y ${{ inputs.durationInDays }} -v "$DEVHUB_ORG_ALIAS" -w 60 -a "$SCRATCH_ORG_ALIAS" --json);
-            SCRATCH_ORG_CREATION_STATUS_CODE=$(echo "$SCRATCH_ORG_CREATION_RESPONSE" | jq .status);
-
-            # early exit - error when creating scratch org
-            if [[ "$SCRATCH_ORG_CREATION_STATUS_CODE" != "0" ]]; then
-              echo "❌ Problem when creating the scratch org"
-              exit 1
-            fi
-
-            echo ""
-            echo "✅ Successfully created the scratch org"
+        echo "✅ Successfully authorized to the DevHub environment"
 
 
-            echo "⏳ Generating credentials to the scratch org..."
+        echo "⏳ Creating a scratch org..."
+        echo "Target scratch org configuration file: ${SCRATCH_ORG_CONFIG_FILE_PATH}"
+        cat $SCRATCH_ORG_CONFIG_FILE_PATH
 
-            # extracting scratch org username
-            SCRATCH_ORG_USERNAME=$(echo $SCRATCH_ORG_CREATION_RESPONSE | jq -r ".result.username")
+        SCRATCH_ORG_CREATION_RESPONSE=$(sf org create scratch -f "$SCRATCH_ORG_CONFIG_FILE_PATH" -y ${{ inputs.durationInDays }} -v "$DEVHUB_ORG_ALIAS" -w 60 -a "$SCRATCH_ORG_ALIAS" --json);
+        SCRATCH_ORG_CREATION_STATUS_CODE=$(echo "$SCRATCH_ORG_CREATION_RESPONSE" | jq .status);
 
-            # extracting scratch org URL
-            SCRATCH_ORG_URL=$(echo $SCRATCH_ORG_CREATION_RESPONSE | jq -r ".result.scratchOrgInfo.LoginUrl // empty")
-            SCRATCH_ORG_URL=${SCRATCH_ORG_URL:-"https://test.salesforce.com"}
+        # early exit - error when creating scratch org
+        if [[ "$SCRATCH_ORG_CREATION_STATUS_CODE" != "0" ]]; then
+          echo "❌ Problem when creating the scratch org"
+          exit 1
+        fi
 
-            GENERATED_USER_PASSWORD_RESPONSE=$(sf org generate password -o="$SCRATCH_ORG_ALIAS" --complexity=3 --json);
-            GENERATED_USER_PASSWORD_STATUS_CODE=$(echo "$GENERATED_USER_PASSWORD_RESPONSE" | jq .status);
+        echo ""
+        echo "✅ Successfully created the scratch org"
 
-            if [[ $GENERATED_USER_PASSWORD_STATUS_CODE -eq 0 ]]; then
-              SCRATCH_ORG_PASSWORD=$(echo -e "$GENERATED_USER_PASSWORD_RESPONSE" | jq -r '.result | if type=="array" then .[0].password else .password end');
-            fi
 
-            echo "✅ Successfully generated scratch org credentials"
+        echo "⏳ Generating credentials to the scratch org..."
 
-            echo "URL: $SCRATCH_ORG_URL"
-            echo "Username: $SCRATCH_ORG_USERNAME"
-            echo "Password: $SCRATCH_ORG_PASSWORD"
+        # extracting scratch org username
+        SCRATCH_ORG_USERNAME=$(echo $SCRATCH_ORG_CREATION_RESPONSE | jq -r ".result.username")
 
-            # set credentials in outputs
-            echo "scratchOrgUrl=$SCRATCH_ORG_URL" >> $GITHUB_OUTPUT
-            echo "scratchOrgUsername=$SCRATCH_ORG_USERNAME" >> $GITHUB_OUTPUT
-            echo "scratchOrgPassword=$SCRATCH_ORG_PASSWORD" >> $GITHUB_OUTPUT
+        # extracting scratch org URL
+        SCRATCH_ORG_URL=$(echo $SCRATCH_ORG_CREATION_RESPONSE | jq -r ".result.scratchOrgInfo.LoginUrl // empty")
+        SCRATCH_ORG_URL=${SCRATCH_ORG_URL:-"https://test.salesforce.com"}
 
-            # print credentials in job summary
-            echo "URL: $SCRATCH_ORG_URL" >> $GITHUB_STEP_SUMMARY
-            echo "Username: $SCRATCH_ORG_USERNAME" >> $GITHUB_STEP_SUMMARY
-            echo "Password: $SCRATCH_ORG_PASSWORD" >> $GITHUB_STEP_SUMMARY
+        GENERATED_USER_PASSWORD_RESPONSE=$(sf org generate password -o="$SCRATCH_ORG_ALIAS" --complexity=3 --json);
+        GENERATED_USER_PASSWORD_STATUS_CODE=$(echo "$GENERATED_USER_PASSWORD_RESPONSE" | jq .status);
+
+        if [[ $GENERATED_USER_PASSWORD_STATUS_CODE -eq 0 ]]; then
+          SCRATCH_ORG_PASSWORD=$(echo -e "$GENERATED_USER_PASSWORD_RESPONSE" | jq -r '.result | if type=="array" then .[0].password else .password end');
+        fi
+
+        echo "✅ Successfully generated scratch org credentials"
+
+        echo "URL: $SCRATCH_ORG_URL"
+        echo "Username: $SCRATCH_ORG_USERNAME"
+        echo "Password: $SCRATCH_ORG_PASSWORD"
+
+        # set credentials in outputs
+        echo "scratchOrgUrl=$SCRATCH_ORG_URL" >> $GITHUB_OUTPUT
+        echo "scratchOrgUsername=$SCRATCH_ORG_USERNAME" >> $GITHUB_OUTPUT
+        echo "scratchOrgPassword=$SCRATCH_ORG_PASSWORD" >> $GITHUB_OUTPUT
+
+        # print credentials in job summary
+        echo "URL: $SCRATCH_ORG_URL" >> $GITHUB_STEP_SUMMARY
+        echo "Username: $SCRATCH_ORG_USERNAME" >> $GITHUB_STEP_SUMMARY
+        echo "Password: $SCRATCH_ORG_PASSWORD" >> $GITHUB_STEP_SUMMARY
