@@ -32,6 +32,8 @@ runs:
 
     steps:
         - shell: bash
+          timeout-minutes: 120
+          continue-on-error: false
           env:
               DEVHUB_ORG_SFDX_URL: ${{ inputs.devHubOrgSfdxUrl }}
               DEVHUB_ORG_ALIAS: "devHub"
@@ -57,8 +59,6 @@ runs:
             cat $SCRATCH_ORG_CONFIG_FILE_PATH
 
             SCRATCH_ORG_CREATION_RESPONSE=$(sf org create scratch -f "$SCRATCH_ORG_CONFIG_FILE_PATH" -y ${{ inputs.durationInDays }} -v "$DEVHUB_ORG_ALIAS" -w 60 -a "$SCRATCH_ORG_ALIAS" --json);
-            echo "$SCRATCH_ORG_CREATION_RESPONSE" | jq .
-
             SCRATCH_ORG_CREATION_STATUS_CODE=$(echo "$SCRATCH_ORG_CREATION_RESPONSE" | jq .status);
 
             # early exit - error when creating scratch org
@@ -66,3 +66,28 @@ runs:
               echo "❌ Problem when creating the scratch org"
               exit 1
             fi
+
+            echo "✅ Successfully created the scratch org"
+
+
+            echo "⏳ Generating credentials to the scratch org"
+
+            # extracting scratch org username
+            SCRATCH_ORG_USERNAME=$(echo $SCRATCH_ORG_CREATION_RESPONSE | jq -r ".result.username")
+
+            # extracting scratch org URL
+            SCRATCH_ORG_URL=$(echo $SCRATCH_ORG_CREATION_RESPONSE | jq -r ".result.scratchOrgInfo.LoginUrl // empty")
+            SCRATCH_ORG_URL=${SCRATCH_ORG_URL:-"https://test.salesforce.com"}
+
+            GENERATED_USER_PASSWORD_RESPONSE=$(sf org generate password -o="$SCRATCH_ORG_ALIAS" --complexity=3 --json);
+            GENERATED_USER_PASSWORD_STATUS_CODE=$(echo "$GENERATED_USER_PASSWORD_RESPONSE" | jq .status);
+
+            if [[ $GENERATED_USER_PASSWORD_STATUS_CODE -eq 0 ]]; then
+              SCRATCH_ORG_PASSWORD=$(echo -e "$GENERATED_USER_PASSWORD_RESPONSE" | jq -r '.result | if type=="array" then .[0].password else .password end');
+            fi
+
+            echo "✅ Successfully generated scratch org credentials"
+
+            echo "URL: $SCRATCH_ORG_URL" >> $GITHUB_STEP_SUMMARY
+            echo "Username: $SCRATCH_ORG_USERNAME" >> $GITHUB_STEP_SUMMARY
+            echo "Password: $SCRATCH_ORG_PASSWORD" >> $GITHUB_STEP_SUMMARY
