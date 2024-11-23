@@ -10,10 +10,6 @@ runs:
     using: "composite"
     
     steps:
-        - name: "Print npm files"
-          shell: bash
-          run: ls "~/.npm/" -l
-        
         - if: ${{ inputs.useCache == 'true' }}
           name: "Configure npm cache"
           uses: actions/cache@v3
