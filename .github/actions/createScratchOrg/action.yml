@@ -28,20 +28,24 @@ inputs:
       - 30
 
 outputs:
+  scratchOrgUrl:
+    description: "Login URL of the created scratch org"
+    value: ${{ steps.createScratchOrg.outputs.scratchOrgUrl }}
+
   scratchOrgUsername:
     description: "Username of the created scratch org"
+    value: ${{ steps.createScratchOrg.outputs.scratchOrgUsername }}
 
   scratchOrgPassword:
     description: "Password of the created scratch org"
-
-  scratchOrgUrl:
-    description: "Login URL of the created scratch org"
+    value: ${{ steps.createScratchOrg.outputs.scratchOrgPassword }}
 
 runs:
   using: "composite"
 
   steps:
-    - shell: bash
+    - id: createScratchOrg
+      shell: bash
       continue-on-error: false
       env:
           DEVHUB_ORG_SFDX_URL: ${{ inputs.devHubOrgSfdxUrl }}
