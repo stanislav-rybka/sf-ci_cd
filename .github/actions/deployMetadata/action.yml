@@ -37,6 +37,10 @@ runs:
         fi
 
 
+        echo "⏳ Installing sfpowerkit plugin if no originally installed version is available ..."
+        (sf plugins | grep -i "sfpowerkit") || (echo "y" | sf plugins install sfpowerkit@$latest)
+
+
         echo "⏳ Authorizing to the target environment..."
 
         DX_AUTH_RESPONSE=$(sf sfpowerkit:auth:login -a "$TARGET_ORG_ALIAS" -u "${TARGET_ORG_USERNAME,,}" -p "${TARGET_ORG_PASSWORD}" -r "${TARGET_ORG_URL}" --json);
