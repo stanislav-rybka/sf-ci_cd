@@ -53,7 +53,7 @@ jobs:
       - name: "Initialize"
         uses: ./.github/actions/init
 
-      - if: ${{ inputs.shouldCreateScratchOrg == 'true' }}
+      - if: inputs.shouldCreateScratchOrg == 'true'
         name: "Create Scratch Org"
         id: createScratchOrg
         uses: ./.github/actions/createScratchOrg
