@@ -112,6 +112,7 @@ runs:
         echo "scratchOrgPassword=$SCRATCH_ORG_PASSWORD" >> $GITHUB_OUTPUT
 
         # print credentials in job summary
+        echo "🔑 Scratch Org Credentials 🔑" >> $GITHUB_STEP_SUMMARY
         echo "URL: $SCRATCH_ORG_URL" >> $GITHUB_STEP_SUMMARY
         echo "Username: $SCRATCH_ORG_USERNAME" >> $GITHUB_STEP_SUMMARY
         echo "Password: $SCRATCH_ORG_PASSWORD" >> $GITHUB_STEP_SUMMARY
