@@ -16,8 +16,6 @@ inputs:
     type: string
     required: true
 
-outputs:
-
 runs:
   using: "composite"
 
