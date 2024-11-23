@@ -38,7 +38,6 @@ runs:
               SCRATCH_ORG_CONFIG_FILE_PATH: ${{ inputs.configFilePath }}
               SCRATCH_ORG_ALIAS: "scratchOrg"
           run: |
-            echo "Duration days: ${{ inputs.durationInDays }}"
             echo "⏳ Authorizing to the DevHub environment..."
 
             DX_AUTH_RESPONSE=$(echo $DEVHUB_ORG_SFDX_URL | sf org login sfdx-url --sfdx-url-stdin --json -a "$DEVHUB_ORG_ALIAS");
@@ -57,4 +56,13 @@ runs:
             echo "Target scratch org configuration file: ${SCRATCH_ORG_CONFIG_FILE_PATH}"
             cat $SCRATCH_ORG_CONFIG_FILE_PATH
 
-            #$(sf org create scratch -f "$SCRATCH_ORG_CONFIG_FILE_PATH" -v "$DEVHUB_ORG_ALIAS" -w 60 -a "$SCRATCH_ORG_ALIAS" --json);
+            SCRATCH_ORG_CREATION_RESPONSE=$(sf org create scratch -f "$SCRATCH_ORG_CONFIG_FILE_PATH" -y ${{ inputs.durationInDays }} -v "$DEVHUB_ORG_ALIAS" -w 60 -a "$SCRATCH_ORG_ALIAS" --json);
+            echo "$SCRATCH_ORG_CREATION_RESPONSE" | jq .
+
+            SCRATCH_ORG_CREATION_STATUS_CODE=$(echo "$SCRATCH_ORG_CREATION_RESPONSE" | jq .status);
+
+            # early exit - error when creating scratch org
+            if [[ "$SCRATCH_ORG_CREATION_STATUS_CODE" != "0" ]]; then
+              echo "❌ Problem when creating the scratch org"
+              exit 1
+            fi
