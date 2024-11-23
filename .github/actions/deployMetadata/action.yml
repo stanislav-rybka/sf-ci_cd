@@ -1,0 +1,34 @@
+name: "Create Scratch Org"
+
+inputs:
+  targetOrgUrl:
+    description: "Target environment login URL"
+    type: string
+    default: "none"
+
+  targetOrgUsername: 
+    description: "Target environment username"
+    type: string
+    required: true
+
+  targetOrgPassword:
+    description: "Target environment password"
+    type: string
+    required: true
+
+outputs:
+
+runs:
+  using: "composite"
+
+  steps:
+    - shell: bash
+      continue-on-error: false
+      env:
+          TARGET_ORG_ALIAS: "targetOrg"
+      run: |
+        echo "Target Org URL: ${{ inputs.targetOrgUrl }}"
+        echo "Target Org Username: ${{ inputs.targetOrgUsername }}"
+        echo "Target Org Password: ${{ inputs.targetOrgPassword }}"
+
+        echo "⏳ Deploying metadata..."
