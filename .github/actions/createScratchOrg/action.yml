@@ -66,10 +66,11 @@ runs:
               exit 1
             fi
 
+            echo ""
             echo "✅ Successfully created the scratch org"
 
 
-            echo "⏳ Generating credentials to the scratch org"
+            echo "⏳ Generating credentials to the scratch org..."
 
             # extracting scratch org username
             SCRATCH_ORG_USERNAME=$(echo $SCRATCH_ORG_CREATION_RESPONSE | jq -r ".result.username")
@@ -87,6 +88,11 @@ runs:
 
             echo "✅ Successfully generated scratch org credentials"
 
+            echo "URL: $SCRATCH_ORG_URL"
+            echo "Username: $SCRATCH_ORG_USERNAME"
+            echo "Password: $SCRATCH_ORG_PASSWORD"
+
+            # print credentials in job summary
             echo "URL: $SCRATCH_ORG_URL" >> $GITHUB_STEP_SUMMARY
             echo "Username: $SCRATCH_ORG_USERNAME" >> $GITHUB_STEP_SUMMARY
             echo "Password: $SCRATCH_ORG_PASSWORD" >> $GITHUB_STEP_SUMMARY
