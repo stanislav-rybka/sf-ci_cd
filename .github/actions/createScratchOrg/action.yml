@@ -1,21 +1,10 @@
 name: "Create Scratch Org"
 
 inputs:
-    devHubOrgUsername:
-        description: "DevHub environment username"
+    devHubOrgSfdxUrl:
+        description: "DevHub environment SFDX URL"
         type: string
         required: true
-
-    devHubOrgPassword:
-        description: "DevHub environment password"
-        type: string
-        required: true
-
-    devHubOrgUrl:
-        description: "DevHub environment URL"
-        type: string
-        required: false
-        default: "https://login.salesforce.com"
 
     durationInDays:
         description: "Number of days for scratch org to expire after"
@@ -39,20 +28,13 @@ runs:
     steps:
         - shell: bash
           env:
-              DEVHUB_ORG_USERNAME: ${{ inputs.devHubOrgUsername }}
-              DEVHUB_ORG_PASSWORD: ${{ inputs.devHubOrgPassword }}
-              DEVHUB_ORG_URL: ${{ inputs.devHubOrgUrl }}
+              DEVHUB_ORG_SFDX_URL: ${{ inputs.devHubOrgSfdxUrl }}
           run: |
-            echo "DevHub org username: ${DEVHUB_ORG_USERNAME}"
-            echo "DevHub org password: ${DEVHUB_ORG_PASSWORD}"
-            echo "DevHub org URL: ${DEVHUB_ORG_URL}"
+            echo "DevHub org SFDX URL: ${DEVHUB_ORG_SFDX_URL}"
 
-            echo "Installing sfpowerkit plugin if no originally installed version is available ..."
-            (sf plugins | grep -i "sfpowerkit") || (echo "y" | sf plugins install sfpowerkit)
-
-            DX_AUTH_RESPONSE=$(sf sfpowerkit:auth:login -a targetOrg -u "${DEVHUB_ORG_USERNAME,,}" -p "${DEVHUB_ORG_PASSWORD}" -r "${DEVHUB_ORG_URL}" --json);
-            DX_STATUS_CODE=$(echo "$DX_AUTH_RESPONSE" | jq .status);
-
+            DX_AUTH_RESPONSE=$(echo $DEVHUB_ORG_SFDX_URL | sf org login sfdx-url --sfdx-url-stdin --json);
+            DX_STATUS_CODE=$(echo $DX_AUTH_RESPONSE | jq .status);
+            
             echo "Authorization response:"
             echo ${DX_AUTH_RESPONSE}
 

@@ -42,5 +42,4 @@ jobs:
             - name: "Create Scratch Org"
               uses: ./.github/actions/createScratchOrg
               with:
-                devHubOrgUsername: ${{ secrets.DEVHUB_ORG_USERNAME }}
-                devHubOrgPassword: ${{ secrets.DEVHUB_ORG_PASSWORD }}
+                devHubOrgSfdxUrl: ${{ secrets.DEVHUB_ORG_SFDX_URL }}
