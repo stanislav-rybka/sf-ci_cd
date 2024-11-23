@@ -72,9 +72,6 @@ jobs:
             echo "TARGET_ORG_URL=${{ steps.createScratchOrg.outputs.scratchOrgUrl }}" >> $GITHUB_ENV
             echo "TARGET_ORG_USERNAME=${{ steps.createScratchOrg.outputs.scratchOrgUsername }}" >> $GITHUB_ENV
             echo "TARGET_ORG_PASSWORD=${{ steps.createScratchOrg.outputs.scratchOrgPassword }}" >> $GITHUB_ENV
-
-            set -x
-            export DEBUG_MODE=1
           fi
 
       - name: "Deploy Metadata"
