@@ -1,5 +1,5 @@
-name: "Create Scratch Org"
-run-name: "Create Scratch Org (${{ github.actor }})"
+name: "Create Scratch Org Manual"
+run-name: "Create Scratch Org Manual (${{ github.actor }})"
 
 on:
     workflow_dispatch:
@@ -38,3 +38,9 @@ jobs:
 
             - name: "Print sfdx version"
               run: sfdx --version
+
+            - name: "Create Scratch Org"
+              uses: ./.github/actions/createScratchOrg
+              with:
+                devHubOrgUsername: ${{ secrets.DEVHUB_ORG_USERNAME }}
+                devHubOrgPassword: ${{ secrets.DEVHUB_ORG_PASSWORD }}

@@ -1,0 +1,46 @@
+name: "Create Scratch Org"
+
+inputs:
+    devHubOrgUsername:
+        description: "DevHub environment username"
+        type: string
+        required: true
+
+    devHubOrgPassword:
+        description: "DevHub environment password"
+        type: string
+        required: true
+
+    durationInDays:
+        description: "Number of days for scratch org to expire after"
+        required: true
+        type: choice
+        default: '5'
+        options:
+            - 1
+            - 2
+            - 3
+            - 5
+            - 7
+            - 10
+            - 15
+            - 20
+            - 30
+
+runs:
+    using: "composite"
+
+    steps:
+        - shell: bash
+          env:
+              DEVHUB_ORG_USERNAME: ${{ inputs.devHubOrgUsername }}
+              DEVHUB_ORG_PASSWORD: ${{ inputs.devHubOrgPassword }}
+          run: |
+            echo "DevHub org username: ${DEVHUB_ORG_USERNAME}"
+            echo "DevHub org password: ${DEVHUB_ORG_PASSWORD}"
+
+            echo "Installing sfpowerkit plugin if no originally installed version is available ..."
+            (sf plugins | grep -i "sfpowerkit") || (echo "y" | sf plugins install sfpowerkit)
+
+            # DX_AUTH_RESPONSE=$(sf sfpowerkit:auth:login -a targetOrg -u "${TARGET_ORG_USERNAME,,}" -p "${TARGET_ORG_PASSWORD}" -r "${TARGET_ORG_URL}" --json);
+            # DX_STATUS_CODE=$(echo "$DX_AUTH_RESPONSE" | jq .status);
