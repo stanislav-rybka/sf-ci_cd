@@ -32,7 +32,6 @@ runs:
 
     steps:
         - shell: bash
-          timeout-minutes: "120"
           continue-on-error: false
           env:
               DEVHUB_ORG_SFDX_URL: ${{ inputs.devHubOrgSfdxUrl }}
