@@ -30,13 +30,18 @@ runs:
           env:
               DEVHUB_ORG_SFDX_URL: ${{ inputs.devHubOrgSfdxUrl }}
           run: |
-            echo "DevHub org SFDX URL: ${DEVHUB_ORG_SFDX_URL}"
+            echo "⏳ Authorizing to the DevHub environment..."
 
-            DX_AUTH_RESPONSE=$(echo $DEVHUB_ORG_SFDX_URL | sf org login sfdx-url --sfdx-url-stdin --json);
+            DX_AUTH_RESPONSE=$(echo $DEVHUB_ORG_SFDX_URL | sf org login sfdx-url --sfdx-url-stdin -a devHub --json);
             DX_STATUS_CODE=$(echo $DX_AUTH_RESPONSE | jq .status);
-            
-            echo "Authorization response:"
-            echo ${DX_AUTH_RESPONSE}
 
-            echo "Authorization status code:"
-            echo ${DX_STATUS_CODE}
+            # early exit - error when authorizing to DevHub
+            if [[ "$DX_STATUS_CODE" != "0" ]]; then
+              echo "❌ Cannot log in to DevHub"
+              exit 1
+            fi
+
+            echo "✅ Successfully authorized to the DevHub environment"
+
+
+            echo "⏳ Creating a scratch org..."
