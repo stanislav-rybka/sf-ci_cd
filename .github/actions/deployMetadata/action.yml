@@ -4,7 +4,6 @@ inputs:
   targetOrgUrl:
     description: "Target environment login URL"
     type: string
-    default: "none"
 
   targetOrgUsername: 
     description: "Target environment username"
