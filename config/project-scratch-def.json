@@ -1,13 +1,24 @@
 {
-  "orgName": "Demo company",
-  "edition": "Developer",
-  "features": ["EnableSetPasswordInApi"],
-  "settings": {
-    "lightningExperienceSettings": {
-      "enableS1DesktopEnabled": true
-    },
-    "mobileSettings": {
-      "enableS1EncryptedStoragePref2": false
+
+    "orgName": "SF CI/CD Scratch Org",
+
+    "edition": "Developer",
+
+    "features": [
+        "RecordTypes",
+        "PlatformCache"
+    ],
+
+    "settings": {
+
+        "lightningExperienceSettings": {
+            "enableS1DesktopEnabled": true
+        },
+        
+        "mobileSettings": {
+            "enableS1EncryptedStoragePref2": false
+        }
+
     }
-  }
+
 }
