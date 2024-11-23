@@ -1,0 +1,68 @@
+name: "Deploy Metadata Manual"
+run-name: "Deploy Metadata Manual (${{ github.actor }})"
+
+on:
+  workflow_dispatch:
+    inputs:
+      targetOrgUrl:
+        description: "Target environment login URL"
+        type: string
+        default: "none"
+
+      targetOrgUsername: 
+        description: "Target environment username"
+        type: string
+        default: "none"
+
+      targetOrgPassword:
+        description: "Target environment password"
+        type: string
+        default: "none"
+
+      shouldCreateScratchOrg:
+        description: "Create new scratch org?"
+        type: boolean
+        default: false
+
+      scratchOrgDurationInDays:
+        description: "Number of days for scratch org to expire after"
+        required: true
+        type: choice
+        default: '5'
+        options:
+          - 1
+          - 2
+          - 3
+          - 5
+          - 7
+          - 10
+          - 15
+          - 20
+          - 30
+
+jobs:
+  DeployMetadata:
+    runs-on: ubuntu-latest
+      
+    name: "Deploy Metadata"
+
+    steps:
+      - name: "Checkout code"
+        uses: actions/checkout@v4
+
+      - name: "Initialize"
+        uses: ./.github/actions/init
+
+      - if: ${{ inputs.shouldCreateScratchOrg == 'true' }}
+        name: "Create Scratch Org"
+        id: createScratchOrg
+        uses: ./.github/actions/createScratchOrg
+        with:
+          devHubOrgSfdxUrl: ${{ secrets.DEVHUB_ORG_SFDX_URL }}
+          durationInDays: ${{ inputs.scratchOrgDurationInDays }}
+
+      - name: "Assign Target Org Credentials"
+        run: |
+          echo "Target Org Url: ${{ steps.createScratchOrg.outputs.scratchOrgUrl }}"
+          echo "Target Org Username: ${{ steps.createScratchOrg.outputs.scratchOrgUsername }}"
+          echo "Target Org Password: ${{ steps.createScratchOrg.outputs.scratchOrgPassword }}"
