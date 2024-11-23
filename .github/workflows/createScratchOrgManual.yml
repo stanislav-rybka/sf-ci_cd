@@ -27,17 +27,11 @@ jobs:
         name: "Create Scratch Org"
 
         steps:
-            - name: "Test Step #1"
-              run: echo "Selected number of duration in days - ${{ inputs.durationInDays }}"
-
             - name: "Checkout code"
               uses: actions/checkout@v4
 
             - name: "Initialize"
               uses: ./.github/actions/init
-
-            - name: "Print sfdx version"
-              run: sfdx --version
 
             - name: "Create Scratch Org"
               uses: ./.github/actions/createScratchOrg
