@@ -32,7 +32,7 @@ runs:
           run: |
             echo "⏳ Authorizing to the DevHub environment..."
 
-            DX_AUTH_RESPONSE=$(echo $DEVHUB_ORG_SFDX_URL | sf org login sfdx-url --sfdx-url-stdin -a devHub --json);
+            DX_AUTH_RESPONSE=$(echo $DEVHUB_ORG_SFDX_URL | sf org login sfdx-url --sfdx-url-stdin --json);
             DX_STATUS_CODE=$(echo $DX_AUTH_RESPONSE | jq .status);
 
             # early exit - error when authorizing to DevHub
