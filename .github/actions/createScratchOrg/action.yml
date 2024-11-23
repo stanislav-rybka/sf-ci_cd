@@ -27,6 +27,16 @@ inputs:
             - 20
             - 30
 
+outputs:
+    scratchOrgUsername:
+        description: "Username of the created scratch org"
+
+    scratchOrgPassword:
+        description: "Password of the created scratch org"
+
+    scratchOrgUrl:
+        description: "Login URL of the created scratch org"
+
 runs:
     using: "composite"
 
@@ -91,6 +101,11 @@ runs:
             echo "URL: $SCRATCH_ORG_URL"
             echo "Username: $SCRATCH_ORG_USERNAME"
             echo "Password: $SCRATCH_ORG_PASSWORD"
+
+            # set credentials in outputs
+            echo "scratchOrgUrl=$SCRATCH_ORG_URL" >> $GITHUB_OUTPUT
+            echo "scratchOrgUsername=$SCRATCH_ORG_USERNAME" >> $GITHUB_OUTPUT
+            echo "scratchOrgPassword=$SCRATCH_ORG_PASSWORD" >> $GITHUB_OUTPUT
 
             # print credentials in job summary
             echo "URL: $SCRATCH_ORG_URL" >> $GITHUB_STEP_SUMMARY
