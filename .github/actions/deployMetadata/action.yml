@@ -39,13 +39,8 @@ runs:
 
         echo "⏳ Authorizing to the target environment..."
 
-        DX_AUTH_RESPONSE=$(sf sfpowerkit:auth:login -u "test.username@avenga.com" -p "test_password" -r "https://test.salesforce.com/" -a "$TARGET_ORG_ALIAS" --json);
-
-        echo "Authorization response:"
-        echo $DX_AUTH_RESPONSE
-
-        # DX_AUTH_RESPONSE=$(sf sfpowerkit:auth:login -a "$TARGET_ORG_ALIAS" -u "$TARGET_ORG_USERNAME" -p "$TARGET_ORG_PASSWORD" -r "$TARGET_ORG_URL" --json);
-        # DX_STATUS_CODE=$(echo "$DX_AUTH_RESPONSE" | jq .status);
+        sf sfpowerkit:auth:login -u "test.username@avenga.com" -p "test_password" -r "https://test.salesforce.com/" -a "$TARGET_ORG_ALIAS" --json
+        # DX_AUTH_RESPONSE=$(sf sfpowerkit:auth:login -u "test.username@avenga.com" -p "test_password" -r "https://test.salesforce.com/" -a "$TARGET_ORG_ALIAS" --json);
 
         # echo "Authorization response:"
         # echo $DX_AUTH_RESPONSE
