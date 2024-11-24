@@ -43,10 +43,15 @@ runs:
         # temporary disabling immediate exit by using "set +e/-e" commands (i.e. some kind of try/catch)
         set +e
         DX_AUTH_RESPONSE=$(sf sfpowerkit:auth:login -u "$TARGET_ORG_USERNAME" -p "$TARGET_ORG_PASSWORD" -r "$TARGET_ORG_URL" -a "$TARGET_ORG_ALIAS" --json);
+        DX_STATUS_CODE=$(echo "$DX_AUTH_RESPONSE" | jq .status);
         set -e
 
-        echo "Authorization response:"
-        echo $DX_AUTH_RESPONSE
+        # early exit - error when authorizing to target org by creds
+        if [[ "$DX_STATUS_CODE" != "0" ]]; then
+          echo "Error when logging in to the target org by provided credentials as '$TARGET_ORG_USERNAME' user"
+          echo "$DX_AUTH_RESPONSE" | jq .
+          exit 1;
+        fi
 
 
         echo "⏳ Deploying metadata..."
