@@ -41,6 +41,5 @@ runs:
         echo "⏳ Installing sfpowerkit plugin if no originally installed version is available ..."
         (sf plugins | grep -i "sfpowerkit") || (echo "y" | sf plugins install sfpowerkit@$latest)
 
-        npm cache verify
-        # npm install rimraf
-        # npm install --force rimraf
+        echo ">> Checking if 'rimraf' is installed..."
+        npm list -g rimraf
