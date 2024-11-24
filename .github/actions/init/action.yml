@@ -47,6 +47,8 @@ runs:
         echo ">> Checking if 'rimraf' is installed..."
         npm list -g rimraf
 
-        echo ">> Trying to re-install 'sfpowerkit' plugin..."
-        sf plugins unlink sfpowerkit
-        npm install -g sfpowerkit
+        echo ">> Trying to re-install 'rimraf'..."
+        npm install -g rimraf
+
+        echo ">> Checking if directory exists"
+        ls /home/runner/.local/share/sf/node_modules/sfpowerkit/node_modules -l
