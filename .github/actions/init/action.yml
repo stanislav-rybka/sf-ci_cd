@@ -64,4 +64,4 @@ runs:
 
         echo ">> Checking 'sfpowerkit' version..."
         sf sfpowerkit --version
-        sf sfpowerkit:auth:login -u "test.username@avenga.com" -p "test_password" -r "https://test.salesforce.com/" --json;
+        # sf sfpowerkit:auth:login -u "test.username@avenga.com" -p "test_password" -r "https://test.salesforce.com/" --json;
