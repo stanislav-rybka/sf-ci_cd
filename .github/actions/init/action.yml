@@ -4,7 +4,7 @@ inputs:
   useCache:
     description: Use cache?
     type: boolean
-    default: true
+    default: false
 
 runs:
   using: "composite"
