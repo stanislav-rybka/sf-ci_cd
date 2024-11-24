@@ -22,12 +22,23 @@ runs:
     - name: "Print node / npm versions"
       shell: bash
       run: |
-        echo "Checking node version..."
-        node --version
+        NODE_VERSION=$(node --version);
+        NPM_VERSION=$(npm --version);
 
-        echo "Checking npm version..."
-        npm --version
+        echo "🏷️ Node version: $NODE_VERSION"
+        echo "🏷️ npm version: $NPM_VERSION"
 
     - name: "Install sfdx with npm"
       shell: bash
       run: npm install @salesforce/cli --global
+
+    - name: "Install sfdx plugins"
+      shell: bash
+      run: |
+        # echo "⏳ Installing sfdmu plugin if no originally installed version is available ..."
+        # (sf plugins | grep -i "sfdmu") || (echo "y" | sf plugins install sfdmu@$(sfdmuVersion))
+
+        echo "⏳ Installing sfpowerkit plugin if no originally installed version is available ..."
+        (sf plugins | grep -i "sfpowerkit") || (echo "y" | sf plugins install sfpowerkit@$latest)
+
+        npm install --force rimraf
