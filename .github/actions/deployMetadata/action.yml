@@ -4,6 +4,7 @@ inputs:
   targetOrgUrl:
     description: "Target environment login URL"
     type: string
+    default: "https://test.salesforce.com"
 
   targetOrgUsername: 
     description: "Target environment username"
@@ -39,9 +40,9 @@ runs:
 
         echo "⏳ Authorizing to the target environment..."
 
+        # temporary disabling immediate exit by using "set +e/-e" commands (i.e. some kind of try/catch)
         set +e
-        #sf sfpowerkit:auth:login -u "test.username@avenga.com" -p "test_password" -r "https://test.salesforce.com/" -a "$TARGET_ORG_ALIAS" --json;
-        DX_AUTH_RESPONSE=$(sf sfpowerkit:auth:login -u "test.username@avenga.com" -p "test_password" -r "https://test.salesforce.com/" -a "$TARGET_ORG_ALIAS" --json);
+        DX_AUTH_RESPONSE=$(sf sfpowerkit:auth:login -u "$TARGET_ORG_USERNAME" -p "$TARGET_ORG_PASSWORD" -r "$TARGET_ORG_URL" -a "$TARGET_ORG_ALIAS" --json);
         set -e
 
         echo "Authorization response:"
