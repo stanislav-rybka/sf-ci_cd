@@ -39,7 +39,7 @@ runs:
 
         echo "⏳ Authorizing to the target environment..."
 
-        DX_AUTH_RESPONSE=$(sf sfpowerkit:auth:login -u "test.username@avenga.com" -p "test_password" -r "https://test.salesforce.com/" --json);
+        DX_AUTH_RESPONSE=$(sf sfpowerkit:auth:login -u "test.username@avenga.com" -p "test_password" -r "https://test.salesforce.com/" -a "$TARGET_ORG_ALIAS" --json);
 
         echo "Authorization response:"
         echo $DX_AUTH_RESPONSE

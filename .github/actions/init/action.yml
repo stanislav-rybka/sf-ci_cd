@@ -41,11 +41,9 @@ runs:
         echo "⏳ Installing sfpowerkit plugin if no originally installed version is available ..."
         (sf plugins | grep -i "sfpowerkit") || (echo "y" | sf plugins install sfpowerkit@$latest)
 
-        CURRENT_PATH=$(pwd)
         cd /home/runner/.local/share/sf/node_modules/sfpowerkit
-        echo ">>>>>> Working directory: $GITHUB_WORKSPACE"
         npm install rimraf
-        cd $CURRENT_PATH
+        cd $GITHUB_WORKSPACE
 
         echo "⏳ Checking sf plugins..."
         sf plugins --core
