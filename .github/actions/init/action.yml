@@ -41,6 +41,8 @@ runs:
         echo "⏳ Installing sfpowerkit plugin if no originally installed version is available ..."
         (sf plugins | grep -i "sfpowerkit") || (echo "y" | sf plugins install sfpowerkit@$latest)
 
+        # for some reasons, 'rimraf' module is not automatically installed for the 'sfpowerkit' plugin.
+        # As a workaround here - installing the module manually
         cd /home/runner/.local/share/sf/node_modules/sfpowerkit
         npm install rimraf
         cd $GITHUB_WORKSPACE
