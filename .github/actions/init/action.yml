@@ -42,10 +42,7 @@ runs:
         (sf plugins | grep -i "sfpowerkit") || (echo "y" | sf plugins install sfpowerkit@$latest)
 
         echo ">> Checking sf plugins..."
-        sf plugins
+        sf plugins --core
 
         echo ">> Checking if 'rimraf' is installed..."
         npm list -g rimraf
-
-        echo ">> Looking for 'sfpowerkit' installation path..."
-        npm list -g sfpowerkit
