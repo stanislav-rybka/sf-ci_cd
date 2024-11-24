@@ -49,4 +49,4 @@ runs:
 
         echo ">> Trying to re-install 'sfpowerkit' plugin..."
         sf plugins unlink sfpowerkit
-        sf plugins install sfpowerkit
+        (echo "y" | sf plugins install sfpowerkit)
