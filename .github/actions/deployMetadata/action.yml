@@ -48,10 +48,13 @@ runs:
 
         # early exit - error when authorizing to target org by creds
         if [[ "$DX_STATUS_CODE" != "0" ]]; then
-          echo "Error when logging in to the target org by provided credentials as '$TARGET_ORG_USERNAME' user"
-          echo "$DX_AUTH_RESPONSE" | jq .
+          echo "❌ Error when logging in to the target org by provided credentials as '$TARGET_ORG_USERNAME' user"
+          echo "$DX_AUTH_RESPONSE" | jq .message
           exit 1;
         fi
+
+        echo ""
+        echo "✅ Successfully authorized as '$TARGET_ORG_USERNAME' user"
 
 
         echo "⏳ Deploying metadata..."
