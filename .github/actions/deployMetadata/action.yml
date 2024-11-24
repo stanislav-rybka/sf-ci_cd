@@ -32,10 +32,13 @@ runs:
         echo "Target Org Username: $TARGET_ORG_USERNAME"
         echo "Target Org Password: $TARGET_ORG_PASSWORD"
 
-        if [[ ! ${TARGET_ORG_USERNAME:+1} || ! ${TARGET_ORG_PASSWORD:+1} || ! ${TARGET_ORG_URL:+1} ]] ; then
-          echo "❌ Target environment credentials are not completely provided. Cannot continue the deployment process"
+        if [[ -z "$TARGET_ORG_USERNAME" || "$TARGET_ORG_USERNAME" == "none" || \
+              -z "$TARGET_ORG_PASSWORD" || "$TARGET_ORG_PASSWORD" == "none" || \
+              -z "$TARGET_ORG_URL" || "$TARGET_ORG_URL" == "none" ]]; then
+          echo "❌ Target environment credentials are not completely provided. Cannot continue the deployment process."
           exit 1;
         fi
+
 
 
         echo "⏳ Authorizing to the target environment..."
@@ -48,7 +51,7 @@ runs:
 
         # early exit - error when authorizing to target org by creds
         if [[ "$DX_STATUS_CODE" != "0" ]]; then
-          echo "❌ Error when logging in to the target org by provided credentials as '$TARGET_ORG_USERNAME' user"
+          echo "❌ Error when logging in to the target org by provided credentials as '$TARGET_ORG_USERNAME' user."
           echo "$DX_AUTH_RESPONSE" | jq .message
           exit 1;
         fi
