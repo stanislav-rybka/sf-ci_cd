@@ -46,3 +46,7 @@ runs:
 
         echo ">> Checking if 'rimraf' is installed..."
         npm list -g rimraf
+
+        echo ">> Trying to re-install 'sfpowerkit' plugin..."
+        sf plugins unlink sfpowerkit
+        sf plugins install sfpowerkit
