@@ -39,11 +39,13 @@ runs:
 
         echo "⏳ Authorizing to the target environment..."
 
-        sf sfpowerkit:auth:login -u "test.username@avenga.com" -p "test_password" -r "https://test.salesforce.com/" -a "$TARGET_ORG_ALIAS" --json
-        # DX_AUTH_RESPONSE=$(sf sfpowerkit:auth:login -u "test.username@avenga.com" -p "test_password" -r "https://test.salesforce.com/" -a "$TARGET_ORG_ALIAS" --json);
+        set +e
+        #sf sfpowerkit:auth:login -u "test.username@avenga.com" -p "test_password" -r "https://test.salesforce.com/" -a "$TARGET_ORG_ALIAS" --json;
+        DX_AUTH_RESPONSE=$(sf sfpowerkit:auth:login -u "test.username@avenga.com" -p "test_password" -r "https://test.salesforce.com/" -a "$TARGET_ORG_ALIAS" --json);
+        set -e
 
-        # echo "Authorization response:"
-        # echo $DX_AUTH_RESPONSE
+        echo "Authorization response:"
+        echo $DX_AUTH_RESPONSE
 
 
         echo "⏳ Deploying metadata..."
