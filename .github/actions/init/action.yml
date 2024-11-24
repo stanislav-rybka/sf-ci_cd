@@ -53,5 +53,9 @@ runs:
         npm install rimraf
         cd $CURRENT_PATH
 
-        echo ">> Checking if directory exists"
+        echo ">> Checking if directory exists..."
         ls /home/runner/.local/share/sf/node_modules/sfpowerkit/node_modules -l
+
+        echo ">> Checking 'sfpowerkit' version..."
+        sf sfpowerkit --version
+        sf sfpowerkit:auth:login
