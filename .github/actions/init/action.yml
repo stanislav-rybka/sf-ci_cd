@@ -6,6 +6,10 @@ inputs:
     type: boolean
     default: true
 
+env:
+  SFPOWERKIT_PLUGIN_VERSION: "latest"
+  SFDMU_PLUGIN_VERSION: "latest"
+
 runs:
   using: "composite"
     
@@ -19,33 +23,52 @@ runs:
         restore-keys: |
           npm-${{ runner.os }}
 
-    - name: "Print node / npm versions"
+    - name: "Print environment information"
       shell: bash
       run: |
-        NODE_VERSION=$(node --version);
-        NPM_VERSION=$(npm --version);
-
-        echo "🏷️ Node version: $NODE_VERSION"
-        echo "🏷️ npm version: $NPM_VERSION"
+        echo "🖥️ Operating system: $(uname -a)"
+        echo "🔧 Shell: $SHELL"
+        echo "🏷️ Node version: $(node --version)"
+        echo "🏷️ npm version: $(npm --version)"
 
     - name: "Install sfdx with npm"
       shell: bash
-      run: npm install @salesforce/cli --global
+      run: |
+        echo "⏳ Installing Salesforce CLI if no originally installed version is available ..."
+        npm install @salesforce/cli --global
+        echo "✅ Salesforce CLI is installed successfully."
 
-    - name: "Install sfdx plugins"
+    - name: "Install sfdx:sfpowerkit plugin"
+      shell: bash
+      env:
+        PLUGIN_PATH: "/home/runner/.local/share/sf/node_modules/sfpowerkit"
+      run: |
+        echo "⏳ Installing sfpowerkit plugin if no originally installed version is available ..."
+        (sf plugins | grep -i "sfpowerkit") || (echo "y" | sf plugins install sfpowerkit@$SFPOWERKIT_PLUGIN_VERSION)
+
+        echo "⏳ Installing missing 'rimraf' module for sfpowerkit..."
+
+        if [ -d "$PLUGIN_PATH" ]; then
+          cd "$PLUGIN_PATH"
+          npm install rimraf || { echo "❌ Failed to install rimraf module."; exit 1; }
+          echo "✅ 'rimraf' module installed successfully"
+          cd $GITHUB_WORKSPACE
+        else
+          echo "❌ sfpowerkit plugin directory is not found: $PLUGIN_PATH"
+          exit 1
+        fi
+
+        echo "✅ sfpowerkit plugin is installed successfully."
+
+    - name: "Install sfdx:sfdmu plugin"
       shell: bash
       run: |
         # echo "⏳ Installing sfdmu plugin if no originally installed version is available ..."
-        # (sf plugins | grep -i "sfdmu") || (echo "y" | sf plugins install sfdmu@$(sfdmuVersion))
+        # (sf plugins | grep -i "sfdmu") || (echo "y" | sf plugins install sfdmu@$SFDMU_PLUGIN_VERSION)
+        # echo "✅ sfdmu plugin is installed successfully."
 
-        echo "⏳ Installing sfpowerkit plugin if no originally installed version is available ..."
-        (sf plugins | grep -i "sfpowerkit") || (echo "y" | sf plugins install sfpowerkit@$latest)
-
-        # for some reasons, 'rimraf' module is not automatically installed for the 'sfpowerkit' plugin.
-        # As a workaround here - installing the module manually
-        cd /home/runner/.local/share/sf/node_modules/sfpowerkit
-        npm install rimraf
-        cd $GITHUB_WORKSPACE
-
-        echo "⏳ Checking sf plugins..."
+    - name: "Print installed sf plugins"
+      shell: bash
+      run: |
+        echo "⏳ Checking installed sf plugins..."
         sf plugins --core
