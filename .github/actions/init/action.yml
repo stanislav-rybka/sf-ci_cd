@@ -36,7 +36,7 @@ runs:
       run: |
         echo "⏳ Installing Salesforce CLI if no originally installed version is available ..."
         npm install @salesforce/cli --global
-        echo "✅ Salesforce CLI is installed successfully."
+        echo "✅ Salesforce CLI $(sf version) is installed successfully."
 
     - name: "Install sfdx:sfpowerkit plugin"
       shell: bash
