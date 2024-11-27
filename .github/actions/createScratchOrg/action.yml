@@ -60,8 +60,10 @@ runs:
 
         # early exit - error when authorizing to DevHub
         if [[ "$DX_STATUS_CODE" != "0" ]]; then
-          echo "❌ Cannot log in to DevHub"
+
+          echo "❌ Cannot log into DevHub"
           exit 1
+
         fi
 
         echo "✅ Successfully authorized to the DevHub environment"
@@ -76,8 +78,10 @@ runs:
 
         # early exit - error when creating scratch org
         if [[ "$SCRATCH_ORG_CREATION_STATUS_CODE" != "0" ]]; then
+
           echo "❌ Problem when creating the scratch org"
           exit 1
+
         fi
 
         echo ""
@@ -97,7 +101,9 @@ runs:
         GENERATED_USER_PASSWORD_STATUS_CODE=$(echo "$GENERATED_USER_PASSWORD_RESPONSE" | jq .status);
 
         if [[ $GENERATED_USER_PASSWORD_STATUS_CODE -eq 0 ]]; then
+
           SCRATCH_ORG_PASSWORD=$(echo -e "$GENERATED_USER_PASSWORD_RESPONSE" | jq -r '.result | if type=="array" then .[0].password else .password end');
+        
         fi
 
         echo "✅ Successfully generated scratch org credentials"
