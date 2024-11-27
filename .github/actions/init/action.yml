@@ -6,10 +6,6 @@ inputs:
     type: boolean
     default: true
 
-env:
-  SFPOWERKIT_PLUGIN_VERSION: "latest"
-  SFDMU_PLUGIN_VERSION: "latest"
-
 runs:
   using: "composite"
     
@@ -41,10 +37,11 @@ runs:
     - name: "Install sfdx:sfpowerkit plugin"
       shell: bash
       env:
+        PLUGIN_VERSION: "latest"
         PLUGIN_PATH: "/home/runner/.local/share/sf/node_modules/sfpowerkit"
       run: |
         echo "⏳ Installing sfpowerkit plugin if no originally installed version is available ..."
-        (sf plugins | grep -i "sfpowerkit") || (echo "y" | sf plugins install sfpowerkit@$SFPOWERKIT_PLUGIN_VERSION)
+        (sf plugins | grep -i "sfpowerkit") || (echo "y" | sf plugins install sfpowerkit@$PLUGIN_VERSION)
 
         echo "⏳ Installing missing 'rimraf' module for sfpowerkit..."
 
@@ -66,9 +63,11 @@ runs:
 
     - name: "Install sfdx:sfdmu plugin"
       shell: bash
+      env:
+        PLUGIN_VERSION: "latest"
       run: |
         # echo "⏳ Installing sfdmu plugin if no originally installed version is available ..."
-        # (sf plugins | grep -i "sfdmu") || (echo "y" | sf plugins install sfdmu@$SFDMU_PLUGIN_VERSION)
+        # (sf plugins | grep -i "sfdmu") || (echo "y" | sf plugins install sfdmu@$PLUGIN_VERSION)
         # echo "✅ sfdmu plugin is installed successfully."
 
     - name: "Print installed sf plugins"
