@@ -90,7 +90,7 @@ runs:
 
           sf project deploy start -o "$TARGET_ORG_ALIAS" -d "$SOURCE_DIRECTORY" --dry-run --ignore-conflicts --ignore-warnings --test-level="NoTestRun" -w 1000 --concise
 
-        if [[ "${DEPLOYMENT_MDOE}" == "validateOnly" ]] ; then
+        elif [[ "${DEPLOYMENT_MDOE}" == "validateWithTests" ]] ; then
 
           sf project deploy start -o "$TARGET_ORG_ALIAS" -d "$SOURCE_DIRECTORY" --dry-run --ignore-conflicts --ignore-warnings --test-level="RunLocalTests" -w 1000 --concise
 
