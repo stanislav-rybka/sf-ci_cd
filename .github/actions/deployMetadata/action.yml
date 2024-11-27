@@ -75,6 +75,9 @@ runs:
         echo ""
         echo "✅ Successfully authorized as '$TARGET_ORG_USERNAME' user"
 
+        echo "BEFORE: List of connected orgs"
+        sf org list
+
     - name: "Deploy Metadata"
       shell: bash
       continue-on-error: false
@@ -82,6 +85,10 @@ runs:
           SOURCE_DIRECTORY: "force-app"
           DEPLOYMENT_MDOE: ${{ inputs.deploymentMode }}
       run: |
+        echo "Target org alias: $TARGET_ORG_ALIAS"
+
+        echo "AFTER: List of connected orgs"
+        sf org list
         # TODO: profiles reconciliation
 
         echo "⏳ Deploying metadata with the "$DEPLOYMENT_MDOE" mode..."
