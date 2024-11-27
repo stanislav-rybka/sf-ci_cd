@@ -91,14 +91,18 @@ runs:
 
           sf project deploy start -o "$TARGET_ORG_ALIAS" -d "$SOURCE_DIRECTORY" --dry-run --ignore-conflicts --ignore-warnings --test-level="NoTestRun" -w 1000 --concise
 
+          echo "✅ Metadata deployment validation without tests is successfully completed"
+
         elif [[ "${DEPLOYMENT_MDOE}" == "validateWithTests" ]] ; then
 
           sf project deploy start -o "$TARGET_ORG_ALIAS" -d "$SOURCE_DIRECTORY" --dry-run --ignore-conflicts --ignore-warnings --test-level="RunLocalTests" -w 1000 --concise
+
+          echo "✅ Metadata deployment validation with tests is successfully completed"
 
         else
 
           sf project deploy start -o "$TARGET_ORG_ALIAS" -d "$SOURCE_DIRECTORY" --ignore-conflicts --ignore-warnings --test-level="RunLocalTests" -w 1000 --concise
 
-        fi
+          echo "✅ Metadata deployment is successfully completed"
 
-        echo "✅ Successfully deployed metadata"
+        fi
