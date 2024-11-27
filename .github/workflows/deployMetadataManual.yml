@@ -7,7 +7,7 @@ on:
       targetOrgUrl:
         description: "Target environment login URL"
         type: string
-        default: "none"
+        default: "https://login.salesforce.com"
 
       targetOrgUsername: 
         description: "Target environment username"
