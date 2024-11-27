@@ -52,3 +52,7 @@ $RECYCLE.BIN/
 
 # Prettier
 .prettier*
+
+# Project manifest
+package.xml
+*/package.xml
