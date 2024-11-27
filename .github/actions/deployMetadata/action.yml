@@ -55,10 +55,11 @@ runs:
 
         echo "⏳ Authorizing to the target environment..."
         echo "TARGET_ORG_ALIAS=$LOCAL_TARGET_ORG_ALIAS" >> $GITHUB_ENV
+        echo "BEFORE: Target org alias: $TARGET_ORG_ALIAS"
 
         # temporary disabling immediate exit by using "set +e/-e" commands (i.e. some kind of try/catch)
         set +e
-        DX_AUTH_RESPONSE=$(sf sfpowerkit:auth:login -u "$TARGET_ORG_USERNAME" -p "$TARGET_ORG_PASSWORD" -r "$TARGET_ORG_URL" -a "$TARGET_ORG_ALIAS" --json);
+        DX_AUTH_RESPONSE=$(sf sfpowerkit:auth:login -u "$TARGET_ORG_USERNAME" -p "$TARGET_ORG_PASSWORD" -a "${TARGET_ORG_ALIAS}" -r "$TARGET_ORG_URL" --json);
         DX_STATUS_CODE=$(echo "$DX_AUTH_RESPONSE" | jq .status);
         set -e
 
@@ -84,7 +85,7 @@ runs:
           SOURCE_DIRECTORY: "force-app"
           DEPLOYMENT_MDOE: ${{ inputs.deploymentMode }}
       run: |
-        echo "Target org alias: $TARGET_ORG_ALIAS"
+        echo "AFTER: Target org alias: $TARGET_ORG_ALIAS"
 
         echo "AFTER: List of connected orgs"
         sf org list
