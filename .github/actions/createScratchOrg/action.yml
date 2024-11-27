@@ -129,7 +129,7 @@ runs:
 
         echo "(BF) ⏳ Deploying profiles changes related to login IP ranges..."
 
-        sf project deploy start -d "$POST_STEP_PATH" -o "LOCAL_SCRATCH_ORG_ALIAS" --ignore-conflicts --ignore-warnings -w 1000
+        sf project deploy start -d "$POST_STEP_PATH" -o "$LOCAL_SCRATCH_ORG_ALIAS" --ignore-conflicts --ignore-warnings -w 1000
 
 
     - name: "Set Profiles Login IP Ranges"
