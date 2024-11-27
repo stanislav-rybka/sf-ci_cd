@@ -101,7 +101,7 @@ runs:
 
         else
 
-          sf project deploy start -o "$TARGET_ORG_ALIAS" -d "$SOURCE_DIRECTORY" --ignore-conflicts --ignore-warnings --test-level="RunLocalTests" -w 1000 --concise
+          sf project deploy start -o "$TARGET_ORG_ALIAS" -d "$SOURCE_DIRECTORY" --ignore-conflicts --ignore-warnings -w 1000 --concise
 
           echo "✅ Metadata deployment is successfully completed"
 
