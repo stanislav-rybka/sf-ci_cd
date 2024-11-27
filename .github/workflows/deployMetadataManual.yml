@@ -40,6 +40,17 @@ on:
           - 20
           - 30
 
+      deploymentMode:
+        description: "Deployment mode"
+        required: true
+        type: choice
+        default: "install"
+        options:
+          - install
+          - upgrade
+          - validateOnly
+          - validateWithTests
+
 jobs:
   DeployMetadata:
     runs-on: ubuntu-latest
@@ -73,7 +84,7 @@ jobs:
             echo "TARGET_ORG_URL=${{ steps.createScratchOrg.outputs.scratchOrgUrl }}" >> $GITHUB_ENV
             echo "TARGET_ORG_USERNAME=${{ steps.createScratchOrg.outputs.scratchOrgUsername }}" >> $GITHUB_ENV
             echo "TARGET_ORG_PASSWORD=${{ steps.createScratchOrg.outputs.scratchOrgPassword }}" >> $GITHUB_ENV
-            
+
           fi
 
       - name: "Deploy Metadata"
@@ -82,3 +93,4 @@ jobs:
           targetOrgUrl: ${{ env.TARGET_ORG_URL }}
           targetOrgUsername: ${{ env.TARGET_ORG_USERNAME }}
           targetOrgPassword: ${{ env.TARGET_ORG_PASSWORD }}
+          deploymentMode: ${{ inputs.deploymentMode }}
