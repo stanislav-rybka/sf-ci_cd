@@ -51,7 +51,7 @@ runs:
           DEVHUB_ORG_SFDX_URL: ${{ inputs.devHubOrgSfdxUrl }}
           DEVHUB_ORG_ALIAS: "devHub"
           SCRATCH_ORG_CONFIG_FILE_PATH: ${{ inputs.configFilePath }}
-          SCRATCH_ORG_ALIAS: "scratchOrg"
+          LOCAL_SCRATCH_ORG_ALIAS: "scratchOrg"
       run: |
         echo "⏳ Authorizing to the DevHub environment..."
 
@@ -73,7 +73,10 @@ runs:
         echo "Target scratch org configuration file: ${SCRATCH_ORG_CONFIG_FILE_PATH}"
         cat $SCRATCH_ORG_CONFIG_FILE_PATH
 
-        SCRATCH_ORG_CREATION_RESPONSE=$(sf org create scratch -f "$SCRATCH_ORG_CONFIG_FILE_PATH" -y ${{ inputs.durationInDays }} -v "$DEVHUB_ORG_ALIAS" -w 60 -a "$SCRATCH_ORG_ALIAS" --json);
+        # setting scratch org alias at runner's level for other steps. Declaring top-level 'env' attribute does not work for composite actions. 
+        echo "SCRATCH_ORG_ALIAS=$LOCAL_SCRATCH_ORG_ALIAS" >> $GITHUB_ENV
+
+        SCRATCH_ORG_CREATION_RESPONSE=$(sf org create scratch -f "$SCRATCH_ORG_CONFIG_FILE_PATH" -y ${{ inputs.durationInDays }} -v "$DEVHUB_ORG_ALIAS" -w 60 -a "$LOCAL_SCRATCH_ORG_ALIAS" --json);
         SCRATCH_ORG_CREATION_STATUS_CODE=$(echo "$SCRATCH_ORG_CREATION_RESPONSE" | jq .status);
 
         # early exit - error when creating scratch org
@@ -97,7 +100,7 @@ runs:
         SCRATCH_ORG_URL=$(echo $SCRATCH_ORG_CREATION_RESPONSE | jq -r ".result.scratchOrgInfo.LoginUrl // empty")
         SCRATCH_ORG_URL=${SCRATCH_ORG_URL:-"https://test.salesforce.com"}
 
-        GENERATED_USER_PASSWORD_RESPONSE=$(sf org generate password -o="$SCRATCH_ORG_ALIAS" --complexity=3 --json);
+        GENERATED_USER_PASSWORD_RESPONSE=$(sf org generate password -o="$LOCAL_SCRATCH_ORG_ALIAS" --complexity=3 --json);
         GENERATED_USER_PASSWORD_STATUS_CODE=$(echo "$GENERATED_USER_PASSWORD_RESPONSE" | jq .status);
 
         if [[ $GENERATED_USER_PASSWORD_STATUS_CODE -eq 0 ]]; then
@@ -122,3 +125,12 @@ runs:
         echo "URL: $SCRATCH_ORG_URL" >> $GITHUB_STEP_SUMMARY
         echo "Username: $SCRATCH_ORG_USERNAME" >> $GITHUB_STEP_SUMMARY
         echo "Password: $SCRATCH_ORG_PASSWORD" >> $GITHUB_STEP_SUMMARY
+
+    - name: "Set Profiles Login IP Ranges"
+      shell: bash
+      env:
+        POST_STEP_PATH: "modules/common/scratch/01-meta-openAccess/profiles"
+      run: |
+        echo "⏳ Deploying profiles changes related to login IP ranges..."
+
+        sf project deploy start -d "$POST_STEP_PATH" -o "SCRATCH_ORG_ALIAS" --ignore-conflicts --ignore-warnings -w 1000
