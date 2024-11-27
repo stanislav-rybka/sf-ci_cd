@@ -4,7 +4,7 @@ inputs:
   targetOrgUrl:
     description: "Target environment login URL"
     type: string
-    default: "https://test.salesforce.com"
+    default: "https://login.salesforce.com"
 
   targetOrgUsername: 
     description: "Target environment username"
@@ -27,18 +27,20 @@ inputs:
       - validateOnly
       - validateWithTests
 
+env:
+  TARGET_ORG_ALIAS: "targetOrg"
+
 runs:
   using: "composite"
 
   steps:
-    - shell: bash
+    - name: "Authorize Target Org"
       continue-on-error: false
+      shell: bash
       env:
-          TARGET_ORG_URL: ${{ inputs.targetOrgUrl }}
-          TARGET_ORG_USERNAME: ${{ inputs.targetOrgUsername }}
-          TARGET_ORG_PASSWORD: ${{ inputs.targetOrgPassword }}
-          TARGET_ORG_ALIAS: "targetOrg"
-          SOURCE_DIRECTORY: "force-app"
+        TARGET_ORG_URL: ${{ inputs.targetOrgUrl }}
+        TARGET_ORG_USERNAME: ${{ inputs.targetOrgUsername }}
+        TARGET_ORG_PASSWORD: ${{ inputs.targetOrgPassword }}
       run: |
         echo "Target Org URL: $TARGET_ORG_URL"
         echo "Target Org Username: $TARGET_ORG_USERNAME"
@@ -52,7 +54,6 @@ runs:
           exit 1;
 
         fi
-
 
         echo "⏳ Authorizing to the target environment..."
 
@@ -74,18 +75,29 @@ runs:
         echo ""
         echo "✅ Successfully authorized as '$TARGET_ORG_USERNAME' user"
 
-
+    - name: "Deploy Metadata"
+      shell: bash
+      continue-on-error: false
+      env:
+          SOURCE_DIRECTORY: "force-app"
+          DEPLOYMENT_MDOE: ${{ inputs.deploymentMode }}
+      run: |
         # TODO: profiles reconciliation
 
-
-        echo "⏳ Deploying metadata..."
+        echo "⏳ Deploying metadata with the "$DEPLOYMENT_MDOE" mode..."
 
         if [[ "${DEPLOYMENT_ACTION_TYPE}" == "validateOnly" ]] ; then
 
-          echo "⏳ Running deployment with in the "Validate Only / Without Tests " mode..."
-
           sf project deploy start -o "$TARGET_ORG_ALIAS" -d "$SOURCE_DIRECTORY" --dry-run --ignore-conflicts --ignore-warnings --test-level="NoTestRun" -w 1000 --concise
 
-          echo "✅ Successfully deployed in the 'Validate Only / Without Tests' mode"
+        if [[ "${DEPLOYMENT_ACTION_TYPE}" == "validateOnly" ]] ; then
+
+          sf project deploy start -o "$TARGET_ORG_ALIAS" -d "$SOURCE_DIRECTORY" --dry-run --ignore-conflicts --ignore-warnings --test-level="RunLocalTests" -w 1000 --concise
+
+        else
+
+          sf project deploy start -o "$TARGET_ORG_ALIAS" -d "$SOURCE_DIRECTORY" --ignore-conflicts --ignore-warnings --test-level="RunLocalTests" -w 1000 --concise
 
         fi
+
+        echo "✅ Successfully deployed metadata"
