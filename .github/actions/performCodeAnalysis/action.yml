@@ -37,4 +37,6 @@ runs:
         steps.runCodeAnalyzer.outputs.exit-code > 0 ||
         steps.runCodeAnalyzer.outputs.num-sev1-violations > 0 ||
         steps.runCodeAnalyzer.outputs.num-violations > 20
-      run: exit 1
+      run: |
+        echo "❌ Violations threshold is exceeded. Failing the step execution."
+        exit 1
