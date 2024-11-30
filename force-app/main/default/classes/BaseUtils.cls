@@ -1,5 +1,7 @@
 public with sharing class BaseUtils {
-    public BaseUtils() {
-
+    
+    private static void debug(String message) {
+        System.debug(message);
     }
+
 }

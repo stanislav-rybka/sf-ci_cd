@@ -1,5 +1,7 @@
 public with sharing class DateTimeUtils {
-    public DateTimeUtils() {
-
+    
+    private static void debug(String message) {
+        System.debug(message);
     }
+
 }
