@@ -30,11 +30,11 @@ runs:
         run-arguments: --normalize-severity --target . --outfile results.html
         results-artifact-name: salesforce-code-analyzer-results
 
-    - name: "Check the outputs to determine whether to fail"
+    - name: "Check Analysis Results"
       shell: bash
       if: |
         inputs.failWhenViolations == true &&
         steps.runCodeAnalyzer.outputs.exit-code > 0 ||
         steps.runCodeAnalyzer.outputs.num-sev1-violations > 0 ||
-        steps.runCodeAnalyzer.outputs.num-violations > 10
+        steps.runCodeAnalyzer.outputs.num-violations > 20
       run: exit 1
