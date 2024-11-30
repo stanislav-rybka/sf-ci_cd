@@ -33,6 +33,9 @@ jobs:
         run: |
           echo ">>> DEBUG: 'failWhenAnalysingCode': ${{ inputs.failWhenAnalysingCode }}"
           echo ">>> DEBUG: 'testString': ${{ inputs.testString }}"
+      
+      - name: "Initialize"
+        uses: ./.github/actions/init
 
       - name: "Perform Code Analysis"
         uses: ./.github/actions/performCodeAnalysis
