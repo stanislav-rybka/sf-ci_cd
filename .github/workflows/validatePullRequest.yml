@@ -1,0 +1,24 @@
+name: "Validate Pull Request"
+run-name: "Validate Pull Request (${{ github.actor }})"
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+  workflow_dispatch:
+
+jobs:
+  PerformCodeAnalysis:
+    runs-on: ubuntu-latest
+    
+    name: "Perform Code Analysis"
+
+    steps:
+      - name: "Checkout Code"
+        uses: actions/checkout@v4
+
+      - name: "Initialize"
+        uses: ./.github/actions/init
+
+      - name: "Perform Code Analysis"
+        uses: ./.github/actions/performCodeAnalysis
