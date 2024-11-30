@@ -30,9 +30,6 @@ jobs:
       - name: "Checkout Code"
         uses: actions/checkout@v4
 
-      - name: "Initialize"
-        uses: ./.github/actions/init
-
       - name: "PRINT PARENT INPUTS"
         run: |
           echo ">>> DEBUG: 'failWhenAnalysingCode': ${{ inputs.failWhenAnalysingCode }}"
