@@ -40,7 +40,7 @@ runs:
         PLUGIN_VERSION: "latest"
         PLUGIN_PATH: "/home/runner/.local/share/sf/node_modules/sfpowerkit"
       run: |
-        echo "⏳ Installing sfpowerkit plugin if no originally installed version is available ..."
+        echo "⏳ Installing 'sfpowerkit' plugin if no originally installed version is available ..."
         (sf plugins | grep -i "sfpowerkit") || (echo "y" | sf plugins install sfpowerkit@$PLUGIN_VERSION)
 
         echo "⏳ Installing missing 'rimraf' module for sfpowerkit..."
@@ -54,7 +54,7 @@ runs:
 
         else
 
-          echo "❌ sfpowerkit plugin directory is not found: $PLUGIN_PATH"
+          echo "❌ 'sfpowerkit' plugin directory is not found: $PLUGIN_PATH"
           exit 1
           
         fi
@@ -66,7 +66,7 @@ runs:
       env:
         PLUGIN_VERSION: "latest"
       run: |
-        # echo "⏳ Installing sfdmu plugin if no originally installed version is available ..."
+        # echo "⏳ Installing 'sfdmu' plugin if no originally installed version is available ..."
         # (sf plugins | grep -i "sfdmu") || (echo "y" | sf plugins install sfdmu@$PLUGIN_VERSION)
         # echo "✅ 'sfdmu' plugin is installed successfully."
 
