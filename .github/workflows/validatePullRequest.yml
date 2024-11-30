@@ -4,6 +4,9 @@ run-name: "Validate Pull Request (${{ github.actor }})"
 on:
   pull_request:
     types: [opened, edited, reopened, synchronize]
+    branches:
+      - main
+      - dev
 
   workflow_dispatch:
     inputs:
