@@ -25,6 +25,7 @@ runs:
         results-artifact-name: salesforce-code-analyzer-results
 
     - name: "Check the outputs to determine whether to fail"
+      shell: bash
       if: |
         steps.runCodeAnalyzer.outputs.exit-code > 0 ||
         steps.runCodeAnalyzer.outputs.num-sev1-violations > 0 ||
