@@ -10,6 +10,11 @@ inputs:
     type: number
     default: 15
 
+  testString:
+    description: "Test string param"
+    type: string
+    default: "This is a default CHILD string value"
+
 runs:
   using: "composite"
 
@@ -19,6 +24,7 @@ runs:
       run: |
         echo ">>> DEBUG: 'failWhenViolations': ${{ inputs.failWhenViolations }}"
         echo ">>> DEBUG: 'violationsThreshold': ${{ inputs.violationsThreshold }}"
+        echo ">>> DEBUG: 'testString': ${{ inputs.testString }}"
 
     - name: "Test Separate"
       shell: bash
