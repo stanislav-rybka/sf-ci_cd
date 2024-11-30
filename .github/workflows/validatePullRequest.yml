@@ -38,4 +38,4 @@ jobs:
         uses: ./.github/actions/performCodeAnalysis
         with:
           testString: ${{ inputs.testString || 'Alternative value' }}
-          failWhenViolations: ${{ inputs.failWhenAnalysingCode || true }}
+          failWhenViolations: ${{ !inputs.failWhenAnalysingCode && false || true }}
