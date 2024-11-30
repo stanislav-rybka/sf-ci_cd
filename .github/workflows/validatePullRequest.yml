@@ -15,11 +15,6 @@ on:
         type: boolean
         default: true
 
-      testString:
-        description: "Test string param"
-        type: string
-        default: "This is a default PARENT string value"
-
 jobs:
   PerformCodeAnalysis:
     runs-on: ubuntu-latest
@@ -29,14 +24,12 @@ jobs:
     steps:
       - name: "Checkout Code"
         uses: actions/checkout@v4
-
-      - name: "PRINT PARENT INPUTS"
-        run: |
-          echo ">>> DEBUG: 'failWhenAnalysingCode': ${{ inputs.failWhenAnalysingCode }}"
-          echo ">>> DEBUG: 'testString': ${{ inputs.testString }}"
+      
+      - name: "Initialize"
+        uses: ./.github/actions/init
 
       - name: "Perform Code Analysis"
         uses: ./.github/actions/performCodeAnalysis
         with:
           testString: ${{ github.event_name == 'workflow_dispatch' && inputs.testString || 'Alternative value' }}
-          failWhenViolations: ${{ github.event_name == 'workflow_dispatch' && inputs.failWhenAnalysingCode || true }}
+          failWhenViolations: ${{ github.event_name == 'workflow_dispatch' && !inputs.failWhenAnalysingCode && 'false' || 'true' }}
