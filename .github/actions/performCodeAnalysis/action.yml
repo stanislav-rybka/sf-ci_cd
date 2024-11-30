@@ -4,6 +4,7 @@ inputs:
   failWhenViolations:
     description: "Fail if violations threshold is exceeded"
     type: boolean
+    default: true
 
   violationsThreshold:
     description: "Violations threshold"
