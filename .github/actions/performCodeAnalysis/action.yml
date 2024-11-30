@@ -21,8 +21,8 @@ runs:
       env:
         PLUGIN_VERSION: "latest"
       run: |
-        echo ">>> DEBUG: 'failWhenViolations' = $failWhenViolations"
-        
+        echo ">>> DEBUG: 'failWhenViolations' = ${{ inputs.failWhenViolations }}"
+
         echo "⏳ Installing 'sfdx-scanner' plugin if no originally installed version is available..."
 
         (sf plugins | grep -i "sfdx-scanner") || (echo "y" | sf plugins install @salesforce/sfdx-scanner@$PLUGIN_VERSION)
