@@ -41,7 +41,7 @@ runs:
         inputs.failWhenViolations == true &&
         steps.runCodeAnalyzer.outputs.exit-code > 0 ||
         steps.runCodeAnalyzer.outputs.num-sev1-violations > 0 ||
-        steps.runCodeAnalyzer.outputs.num-violations > ${{ fromJson(inputs.violationsThreshold) }}
+        ${{ fromJson(steps.runCodeAnalyzer.outputs.num-violations) > fromJson(inputs.violationsThreshold) }}
       run: |
         echo "Reported violations: ${{ steps.runCodeAnalyzer.outputs.num-violations }}"
         echo "Defined threshold: ${{ inputs.violationsThreshold }}"
