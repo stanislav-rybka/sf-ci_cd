@@ -15,10 +15,6 @@ on:
         type: boolean
         default: true
 
-      testString:
-        description: "Test string param"
-        type: string
-
 jobs:
   PerformCodeAnalysis:
     runs-on: ubuntu-latest
@@ -28,11 +24,6 @@ jobs:
     steps:
       - name: "Checkout Code"
         uses: actions/checkout@v4
-
-      - name: "PRINT PARENT INPUTS"
-        run: |
-          echo ">>> DEBUG: 'failWhenAnalysingCode': ${{ inputs.failWhenAnalysingCode }}"
-          echo ">>> DEBUG: 'testString': ${{ inputs.testString }}"
       
       - name: "Initialize"
         uses: ./.github/actions/init

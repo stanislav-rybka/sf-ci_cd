@@ -11,43 +11,16 @@ inputs:
     type: number
     default: 15
 
-  testString:
-    description: "Test string param"
-    type: string
-    default: "This is a default CHILD string value"
-
 runs:
   using: "composite"
 
   steps:
-    - name: "PRINT CHILD INPUTS"
-      shell: bash
-      run: |
-        echo ">>> DEBUG: 'failWhenViolations': ${{ inputs.failWhenViolations }}"
-        echo ">>> DEBUG: 'violationsThreshold': ${{ inputs.violationsThreshold }}"
-        echo ">>> DEBUG: 'testString': ${{ inputs.testString }}"
-
-    - name: "Test Separate"
-      shell: bash
-      if: |
-        inputs.failWhenViolations == 'true'
-      run: |
-        echo "✅ TEST SEPARATE STEP IS EXECUTED"
-
-    - name: "Test Single"
-      shell: bash
-      if: ${{ inputs.failWhenViolations == 'true' }}
-      run: |
-        echo "✅ TEST SINGLE STEP IS EXECUTED"
-
     - name: "Install Plugin - Salesforce Code Analyzer"
       continue-on-error: false
       shell: bash
       env:
         PLUGIN_VERSION: "latest"
       run: |
-        echo ">>> DEBUG: 'failWhenViolations' = ${{ inputs.failWhenViolations }}"
-
         echo "⏳ Installing 'sfdx-scanner' plugin if no originally installed version is available..."
 
         (sf plugins | grep -i "sfdx-scanner") || (echo "y" | sf plugins install @salesforce/sfdx-scanner@$PLUGIN_VERSION)
