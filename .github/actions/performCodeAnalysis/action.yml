@@ -30,12 +30,12 @@ runs:
     - name: "Test Separate"
       shell: bash
       if: |
-        inputs.failWhenViolations == true
+        inputs.failWhenViolations == 'true'
       run: |
         echo "✅ TEST SEPARATE STEP IS EXECUTED"
 
     - name: "Test Single"
       shell: bash
-      if: ${{ inputs.failWhenViolations == true }}
+      if: ${{ inputs.failWhenViolations == 'true' }}
       run: |
         echo "✅ TEST SINGLE STEP IS EXECUTED"
