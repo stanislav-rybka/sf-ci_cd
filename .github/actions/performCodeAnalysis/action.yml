@@ -21,6 +21,8 @@ runs:
       env:
         PLUGIN_VERSION: "latest"
       run: |
+        echo ">>> DEBUG: 'failWhenViolations' = $failWhenViolations"
+        
         echo "⏳ Installing 'sfdx-scanner' plugin if no originally installed version is available..."
 
         (sf plugins | grep -i "sfdx-scanner") || (echo "y" | sf plugins install @salesforce/sfdx-scanner@$PLUGIN_VERSION)
@@ -38,10 +40,7 @@ runs:
     - name: "Check Analysis Results"
       shell: bash
       if: |
-        inputs.failWhenViolations == true &&
-        steps.runCodeAnalyzer.outputs.exit-code > 0 ||
-        steps.runCodeAnalyzer.outputs.num-sev1-violations > 0 ||
-        ${{ fromJson(steps.runCodeAnalyzer.outputs.num-violations) > fromJson(inputs.violationsThreshold) }}
+        inputs.failWhenViolations == true
       run: |
         echo "Reported violations: ${{ steps.runCodeAnalyzer.outputs.num-violations }}"
         echo "Defined threshold: ${{ inputs.violationsThreshold }}"
