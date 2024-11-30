@@ -6,6 +6,11 @@ inputs:
     type: boolean
     default: true
 
+  violationsThreshold:
+    description: "Violations threshold"
+    type: number
+    default: 15
+
 runs:
   using: "composite"
 
@@ -36,7 +41,7 @@ runs:
         inputs.failWhenViolations == true &&
         steps.runCodeAnalyzer.outputs.exit-code > 0 ||
         steps.runCodeAnalyzer.outputs.num-sev1-violations > 0 ||
-        steps.runCodeAnalyzer.outputs.num-violations > 20
+        steps.runCodeAnalyzer.outputs.num-violations > inputs.violationsThreshold
       run: |
         echo "❌ Violations threshold is exceeded. Failing the step execution."
         exit 1
