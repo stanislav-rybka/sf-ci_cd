@@ -18,7 +18,6 @@ on:
       testString:
         description: "Test string param"
         type: string
-        default: "This is a default PARENT string value #1"
 
 jobs:
   PerformCodeAnalysis:
@@ -38,5 +37,5 @@ jobs:
       - name: "Perform Code Analysis"
         uses: ./.github/actions/performCodeAnalysis
         with:
-          testString: ${{ github.event_name == 'workflow_dispatch' && inputs.testString || 'Alternative value' }}
-          failWhenViolations: ${{ github.event_name == 'workflow_dispatch' && inputs.failWhenAnalysingCode || true }}
+          testString: ${{ inputs.testString || 'Alternative value' }}
+          failWhenViolations: ${{ inputs.failWhenAnalysingCode || true }}
