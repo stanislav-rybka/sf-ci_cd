@@ -11,7 +11,7 @@ runs:
     
   steps:
     - if: ${{ inputs.useCache == 'true' }}
-      name: "Configure npm cache"
+      name: "Configure 'npm' Cache"
       uses: actions/cache@v3
       with:
         path: ~/.npm
@@ -19,7 +19,7 @@ runs:
         restore-keys: |
           npm-${{ runner.os }}
 
-    - name: "Print environment information"
+    - name: "Print Environment Information"
       shell: bash
       run: |
         echo "🖥️ Operating system: $(uname -a)"
@@ -27,14 +27,14 @@ runs:
         echo "🏷️ Node version: $(node --version)"
         echo "🏷️ npm version: $(npm --version)"
 
-    - name: "Install sfdx with npm"
+    - name: "Install Salesforce CLI"
       shell: bash
       run: |
         echo "⏳ Installing Salesforce CLI if no originally installed version is available ..."
         npm install @salesforce/cli --global
-        echo "✅ Salesforce CLI $(sf version) is installed successfully."
+        echo "✅ Salesforce CLI '$(sf version)' is installed successfully."
 
-    - name: "Install sfdx:sfpowerkit plugin"
+    - name: "Install Plugin - 'sfdx:sfpowerkit'"
       shell: bash
       env:
         PLUGIN_VERSION: "latest"
@@ -49,7 +49,7 @@ runs:
 
           cd "$PLUGIN_PATH"
           npm install rimraf || { echo "❌ Failed to install rimraf module."; exit 1; }
-          echo "✅ 'rimraf' module installed successfully"
+          echo "✅ 'rimraf' module is installed successfully"
           cd $GITHUB_WORKSPACE
 
         else
@@ -59,18 +59,18 @@ runs:
           
         fi
 
-        echo "✅ sfpowerkit plugin is installed successfully."
+        echo "✅ 'sfpowerkit' plugin is installed successfully."
 
-    - name: "Install sfdx:sfdmu plugin"
+    - name: "Install Plugin - 'sfdx:sfdmu'"
       shell: bash
       env:
         PLUGIN_VERSION: "latest"
       run: |
         # echo "⏳ Installing sfdmu plugin if no originally installed version is available ..."
         # (sf plugins | grep -i "sfdmu") || (echo "y" | sf plugins install sfdmu@$PLUGIN_VERSION)
-        # echo "✅ sfdmu plugin is installed successfully."
+        # echo "✅ 'sfdmu' plugin is installed successfully."
 
-    - name: "Print installed sf plugins"
+    - name: "Print Installed Salesforce Plugins"
       shell: bash
       run: |
         echo "⏳ Checking installed sf plugins..."

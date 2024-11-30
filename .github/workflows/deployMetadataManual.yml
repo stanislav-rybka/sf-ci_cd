@@ -63,7 +63,7 @@ jobs:
       TARGET_ORG_PASSWORD: ${{ inputs.targetOrgPassword }}
 
     steps:
-      - name: "Checkout code"
+      - name: "Checkout Code"
         uses: actions/checkout@v4
 
       - name: "Initialize"

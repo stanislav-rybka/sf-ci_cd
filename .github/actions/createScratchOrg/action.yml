@@ -44,7 +44,8 @@ runs:
   using: "composite"
 
   steps:
-    - id: createScratchOrg
+    - name: "Create Scratch Org"
+      id: createScratchOrg
       shell: bash
       continue-on-error: false
       env:
@@ -134,3 +135,5 @@ runs:
         echo "⏳ Deploying profiles changes related to login IP ranges..."
 
         sf project deploy start -d "$POST_STEP_PATH" -o "$SCRATCH_ORG_ALIAS" --ignore-conflicts --ignore-warnings -w 1000
+
+        echo "✅ Profile changes are successfully deployed"
