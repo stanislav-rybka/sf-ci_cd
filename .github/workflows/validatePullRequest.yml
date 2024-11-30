@@ -33,6 +33,7 @@ jobs:
       - name: "PRINT PARENT INPUTS"
         run: |
           echo ">>> DEBUG: 'failWhenAnalysingCode': ${{ inputs.failWhenAnalysingCode }}"
+          echo ">>> DEBUG: 'testString': ${{ inputs.testString }}"
 
       - name: "Perform Code Analysis"
         uses: ./.github/actions/performCodeAnalysis
