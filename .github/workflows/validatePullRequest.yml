@@ -18,7 +18,7 @@ on:
       testString:
         description: "Test string param"
         type: string
-        default: "This is a default PARENT string value"
+        default: "This is a default PARENT string value #1"
 
 jobs:
   PerformCodeAnalysis:
