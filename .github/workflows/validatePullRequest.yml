@@ -28,7 +28,11 @@ jobs:
       - name: "Initialize"
         uses: ./.github/actions/init
 
+      - name: "PRINT PARENT INPUTS"
+        run: |
+          echo ">>> DEBUG: 'failWhenAnalysingCode': ${{ inputs.failWhenAnalysingCode }}"
+
       - name: "Perform Code Analysis"
         uses: ./.github/actions/performCodeAnalysis
         with:
-          failWhenViolations: ${{ github.event_name == 'workflow_dispatch' && inputs.failWhenAnalysingCode || true }}
+          failWhenViolations: ${{ inputs.failWhenAnalysingCode || true }}

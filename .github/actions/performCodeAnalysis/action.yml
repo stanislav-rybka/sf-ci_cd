@@ -15,35 +15,21 @@ runs:
   using: "composite"
 
   steps:
-    - name: "Install Plugin - Salesforce Code Analyzer"
-      continue-on-error: false
+    - name: "PRINT CHILD INPUTS"
       shell: bash
-      env:
-        PLUGIN_VERSION: "latest"
       run: |
-        echo ">>> DEBUG: 'failWhenViolations' = ${{ inputs.failWhenViolations }}"
+        echo ">>> DEBUG: 'failWhenViolations': ${{ inputs.failWhenViolations }}"
+        echo ">>> DEBUG: 'violationsThreshold': ${{ inputs.violationsThreshold }}"
 
-        echo "⏳ Installing 'sfdx-scanner' plugin if no originally installed version is available..."
-
-        (sf plugins | grep -i "sfdx-scanner") || (echo "y" | sf plugins install @salesforce/sfdx-scanner@$PLUGIN_VERSION)
-
-        echo "✅ 'sfdx-scanner' plugin is installed successfully"
-
-    - name: "Run Salesforce Code Analyzer"
-      id: runCodeAnalyzer
-      uses: forcedotcom/run-code-analyzer@v1
-      with:
-        run-command: run
-        run-arguments: --normalize-severity --target . --outfile results.html
-        results-artifact-name: salesforce-code-analyzer-results
-
-    - name: "Check Analysis Results"
+    - name: "Test Separate"
       shell: bash
       if: |
         inputs.failWhenViolations == true
       run: |
-        echo "Reported violations: ${{ steps.runCodeAnalyzer.outputs.num-violations }}"
-        echo "Defined threshold: ${{ inputs.violationsThreshold }}"
+        echo "✅ TEST SEPARATE STEP IS EXECUTED"
 
-        echo "❌ Violations threshold is exceeded. Failing the step execution."
-        exit 1
+    - name: "Test Single"
+      shell: bash
+      if: ${{ inputs.failWhenViolations == true }}
+      run: |
+        echo "✅ TEST SINGLE STEP IS EXECUTED"
