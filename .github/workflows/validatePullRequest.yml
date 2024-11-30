@@ -6,6 +6,11 @@ on:
     types: [opened, edited, reopened, synchronize]
 
   workflow_dispatch:
+    inputs:
+      failWhenAnalysingCode:
+        description: "Fail when running code analysis?"
+        type: boolean
+        default: true
 
 jobs:
   PerformCodeAnalysis:
@@ -22,3 +27,5 @@ jobs:
 
       - name: "Perform Code Analysis"
         uses: ./.github/actions/performCodeAnalysis
+        with:
+          failWhenViolations: ${{ github.event_name == 'workflow_dispatch' && inputs.failWhenAnalysingCode || true }}
