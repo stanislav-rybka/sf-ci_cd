@@ -15,6 +15,11 @@ on:
         type: boolean
         default: true
 
+      failWhenAnalysingFlows:
+        description: "Fail when running flows analysis?"
+        type: boolean
+        default: true
+
 jobs:
   PerformCodeAnalysis:
     runs-on: ubuntu-latest
@@ -28,7 +33,7 @@ jobs:
       - name: "Initialize"
         uses: ./.github/actions/init
 
-      - name: "Perform Code Analysis"
-        uses: ./.github/actions/performCodeAnalysis
+      - name: "Perform Flows Analysis"
+        uses: ./.github/actions/performFlowsAnalysis
         with:
-          failWhenViolations: ${{ github.event_name == 'workflow_dispatch' && !inputs.failWhenAnalysingCode && 'false' || 'true' }}
+          failWhenViolations: ${{ github.event_name == 'workflow_dispatch' && !inputs.failWhenAnalysingFlows && 'false' || 'true' }}
