@@ -1,7 +1,7 @@
 ({
-    myAction : function(component, event, helper) {
-        var test = 'test';
+    // myAction : function(component, event, helper) {
+    //     var test = 'test';
 
-        console.log(test);
-    }
+    //     console.log(test);
+    // }
 })
