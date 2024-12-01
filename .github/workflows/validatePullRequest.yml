@@ -31,5 +31,4 @@ jobs:
       - name: "Perform Code Analysis"
         uses: ./.github/actions/performCodeAnalysis
         with:
-          testString: ${{ github.event_name == 'workflow_dispatch' && inputs.testString || 'Alternative value' }}
           failWhenViolations: ${{ github.event_name == 'workflow_dispatch' && !inputs.failWhenAnalysingCode && 'false' || 'true' }}
