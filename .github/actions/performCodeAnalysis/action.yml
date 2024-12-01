@@ -15,6 +15,12 @@ runs:
   using: "composite"
 
   steps:
+    - name: "Debug CHILDREN Inputs"
+      shell: bash
+      run: |
+        echo ">>> DEBUG: 'failWhenViolations': ${{ inputs.failWhenViolations }}"
+        echo ">>> DEBUG: 'violationsThreshold': ${{ inputs.violationsThreshold }}"
+
     - name: "Install Plugin - Salesforce Code Analyzer"
       continue-on-error: false
       shell: bash
