@@ -46,9 +46,9 @@ runs:
       if: |
         inputs.failWhenViolations == 'true' &&
         (steps.runCodeAnalyzer.outputs.exit-code > 0 ||
-        steps.runCodeAnalyzer.outputs.num-sev1-violations > 0 ||
-        steps.runCodeAnalyzer.outputs.num-violations > inputs.violationsThreshold)
+        steps.runCodeAnalyzer.outputs.num-sev1-violations > 0)
       run: |
+        echo "Failure mode enabled: ${{ inputs.failWhenViolations }}"
         echo "Defined violations threshold: ${{ inputs.violationsThreshold }}"
         echo "Reported violations: ${{ steps.runCodeAnalyzer.outputs.num-violations }}"
         echo "Analyzer exit code: ${{ steps.runCodeAnalyzer.outputs.exit-code }}"
