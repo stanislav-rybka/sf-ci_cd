@@ -9,7 +9,7 @@ inputs:
   violationsThreshold:
     description: "Violations threshold"
     type: number
-    default: 15
+    default: 5
 
 runs:
   using: "composite"
@@ -41,10 +41,10 @@ runs:
         inputs.failWhenViolations == 'true' &&
         steps.runCodeAnalyzer.outputs.exit-code > 0 ||
         steps.runCodeAnalyzer.outputs.num-sev1-violations > 0 ||
-        steps.runCodeAnalyzer.outputs.num-violations > 10
+        steps.runCodeAnalyzer.outputs.num-violations > inputs.violationsThreshold
       run: |
+        echo "Defined violations threshold: ${{ inputs.violationsThreshold }}"
         echo "Reported violations: ${{ steps.runCodeAnalyzer.outputs.num-violations }}"
-        echo "Defined threshold: ${{ inputs.violationsThreshold }}"
 
         echo "❌ Violations threshold is exceeded. Failing the step execution."
         exit 1
