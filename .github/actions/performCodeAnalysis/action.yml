@@ -45,8 +45,11 @@ runs:
       shell: bash
       if: |
         inputs.failWhenViolations == 'true' &&
-        (steps.runCodeAnalyzer.outputs.exit-code > 0 ||
-        steps.runCodeAnalyzer.outputs.num-sev1-violations > 0)
+        (
+          steps.runCodeAnalyzer.outputs.exit-code > 0 ||
+          steps.runCodeAnalyzer.outputs.num-sev1-violations > 0 ||
+          ${{ steps.runCodeAnalyzer.outputs.num-violations > fromJSON(inputs.violationsThreshold) }}
+        )
       run: |
         echo "Failure mode enabled: ${{ inputs.failWhenViolations }}"
         echo "Defined violations threshold: ${{ inputs.violationsThreshold }}"
