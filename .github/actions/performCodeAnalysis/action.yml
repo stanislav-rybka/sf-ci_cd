@@ -43,19 +43,23 @@ runs:
 
     - name: "Check Analysis Results"
       shell: bash
-      if: |
-        inputs.failWhenViolations == 'true' &&
-        (
-          steps.runCodeAnalyzer.outputs.exit-code > 0 ||
-          steps.runCodeAnalyzer.outputs.num-sev1-violations > 0 ||
-          ${{ steps.runCodeAnalyzer.outputs.num-violations > fromJSON(inputs.violationsThreshold) }}
-        )
+      env:
+        FAILURE_MODE_ENABLED: ${{ inputs.failWhenViolations }}
+        VIOLATIONS_THRESHOLD: ${{ inputs.violationsThreshold }}
+        ANALYSIS_EXIT_CODE: ${{ steps.runCodeAnalyzer.outputs.exit-code }}
+        ANALYSIS_SEV1_VIOLATIONS: ${{ steps.runCodeAnalyzer.outputs.num-sev1-violations }}
+        ANALYSIS_TOTAL_VIOLATIONS: ${{ steps.runCodeAnalyzer.outputs.num-violations }}
       run: |
-        echo "Failure mode enabled: ${{ inputs.failWhenViolations }}"
-        echo "Defined violations threshold: ${{ inputs.violationsThreshold }}"
-        echo "Reported violations: ${{ steps.runCodeAnalyzer.outputs.num-violations }}"
-        echo "Analyzer exit code: ${{ steps.runCodeAnalyzer.outputs.exit-code }}"
-        echo "Analyzer severity 1 violations: ${{ steps.runCodeAnalyzer.outputs.num-violations }}"
+        echo "Failure mode enabled: $FAILURE_MODE_ENABLED"
+        echo "Defined violations threshold: $VIOLATIONS_THRESHOLD"
+        echo "Analyzer exit code: $ANALYSIS_EXIT_CODE"
+        echo "Analyzer severity_1 violations: $ANALYSIS_SEV1_VIOLATIONS"
+        echo "Analyzer total violations: $ANALYSIS_TOTAL_VIOLATIONS"
 
-        echo "❌ Failing the step execution due to reported code analysis violations."
-        exit 1
+        if [[ "$FAILURE_MODE_ENABLED" == "true" ]] && \
+           { [[ "$ANALYSIS_EXIT_CODE" -gt 0 ]] || [[ "$ANALYSIS_SEV1_VIOLATIONS" -gt 0 ]] || [[ "$ANALYSIS_TOTAL_VIOLATIONS" -gt "$VIOLATIONS_THRESHOLD" ]]; }; then
+          
+          echo "❌ Failing the step execution due to reported code analysis violations."
+          exit 1
+
+        fi
