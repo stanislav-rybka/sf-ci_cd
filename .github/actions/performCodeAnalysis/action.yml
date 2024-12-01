@@ -9,7 +9,7 @@ inputs:
   violationsThreshold:
     description: "Violations threshold"
     type: number
-    default: 5
+    default: 15
 
 runs:
   using: "composite"
