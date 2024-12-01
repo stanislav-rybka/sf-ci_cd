@@ -52,5 +52,5 @@ runs:
         echo "Defined violations threshold: ${{ inputs.violationsThreshold }}"
         echo "Reported violations: ${{ steps.runCodeAnalyzer.outputs.num-violations }}"
 
-        echo "❌ Violations threshold is exceeded. Failing the step execution."
+        echo "❌ Failing the step execution due to reported code analysis violations."
         exit 1
