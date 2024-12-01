@@ -45,9 +45,9 @@ runs:
       shell: bash
       if: |
         inputs.failWhenViolations == 'true' &&
-        steps.runCodeAnalyzer.outputs.exit-code > 0 ||
+        (steps.runCodeAnalyzer.outputs.exit-code > 0 ||
         steps.runCodeAnalyzer.outputs.num-sev1-violations > 0 ||
-        steps.runCodeAnalyzer.outputs.num-violations > inputs.violationsThreshold
+        steps.runCodeAnalyzer.outputs.num-violations > inputs.violationsThreshold)
       run: |
         echo "Defined violations threshold: ${{ inputs.violationsThreshold }}"
         echo "Reported violations: ${{ steps.runCodeAnalyzer.outputs.num-violations }}"
