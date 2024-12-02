@@ -124,7 +124,7 @@ runs:
         GENERATED_USER_PASSWORD_RESPONSE=$(sf org generate password \
             -o="$LOCAL_SCRATCH_ORG_ALIAS" \
             --complexity=3 \
-            --json)
+            --json);
 
         GENERATED_USER_PASSWORD_STATUS_CODE=$(echo "$GENERATED_USER_PASSWORD_RESPONSE" | jq .status);
 
