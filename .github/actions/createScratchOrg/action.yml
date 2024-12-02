@@ -56,9 +56,9 @@ runs:
 
         echo "⏳ Authorizing to the DevHub environment..."
 
-        echo $DEVHUB_ORG_SFDX_URL | sf org login sfdx-url --sfdx-url-stdin -a "$DEVHUB_ORG_ALIAS" --json
+        echo $DEVHUB_ORG_SFDX_URL | sf org login sfdx-url --sfdx-url-stdin --json -a "$DEVHUB_ORG_ALIAS"
 
-        DX_AUTH_RESPONSE=$(echo $DEVHUB_ORG_SFDX_URL | sf org login sfdx-url --sfdx-url-stdin -a "$DEVHUB_ORG_ALIAS" --json);
+        DX_AUTH_RESPONSE=$(echo $DEVHUB_ORG_SFDX_URL | sf org login sfdx-url --sfdx-url-stdin --json -a "$DEVHUB_ORG_ALIAS");
         DX_STATUS_CODE=$(echo $DX_AUTH_RESPONSE | jq .status);
 
         # early exit - error when authorizing to DevHub
