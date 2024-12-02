@@ -1,5 +1,5 @@
 ({
-    myAction : function(component, event, helper) {
-        // test
-    }
+    // myAction : function(component, event, helper) {
+    //     // test
+    // }
 })
