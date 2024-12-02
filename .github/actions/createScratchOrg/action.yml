@@ -121,11 +121,7 @@ runs:
         SCRATCH_ORG_URL=$(echo $SCRATCH_ORG_CREATION_RESPONSE | jq -r ".result.scratchOrgInfo.LoginUrl // empty")
         SCRATCH_ORG_URL=${SCRATCH_ORG_URL:-"https://test.salesforce.com"}
 
-        GENERATED_USER_PASSWORD_RESPONSE=$(sf org generate password \
-            -o="$LOCAL_SCRATCH_ORG_ALIAS" \
-            --complexity=3 \
-            --json);
-
+        GENERATED_USER_PASSWORD_RESPONSE=$(sf org generate password -o="$LOCAL_SCRATCH_ORG_ALIAS" --complexity=3 --json);
         GENERATED_USER_PASSWORD_STATUS_CODE=$(echo "$GENERATED_USER_PASSWORD_RESPONSE" | jq .status);
 
         if [[ $GENERATED_USER_PASSWORD_STATUS_CODE -eq 0 ]]; then
