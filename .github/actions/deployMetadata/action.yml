@@ -60,8 +60,16 @@ runs:
 
         # temporary disabling immediate exit by using "set +e/-e" commands (i.e. some kind of try/catch)
         set +e
-        DX_AUTH_RESPONSE=$(sf sfpowerkit:auth:login -u "$TARGET_ORG_USERNAME" -p "$TARGET_ORG_PASSWORD" -a "$LOCAL_TARGET_ORG_ALIAS" -r "$TARGET_ORG_URL" --json);
-        DX_STATUS_CODE=$(echo "$DX_AUTH_RESPONSE" | jq .status);
+
+        DX_AUTH_RESPONSE=$(sf sfpowerkit:auth:login \
+            -u "$TARGET_ORG_USERNAME" \
+            -p "$TARGET_ORG_PASSWORD" \
+            -a "$LOCAL_TARGET_ORG_ALIAS" \
+            -r "$TARGET_ORG_URL" \
+            --json)
+
+        DX_STATUS_CODE=$(echo "$DX_AUTH_RESPONSE" | jq .status)
+        
         set -e
 
         # early exit - error when authorizing to target org by creds
@@ -89,19 +97,41 @@ runs:
 
         if [[ "${DEPLOYMENT_MDOE}" == "validateOnly" ]] ; then
 
-          sf project deploy start -o "$TARGET_ORG_ALIAS" -d "$SOURCE_DIRECTORY" --dry-run --ignore-conflicts --ignore-warnings --test-level="NoTestRun" -w 1000 --concise
+          sf project deploy start \
+              -o "$TARGET_ORG_ALIAS" \
+              -d "$SOURCE_DIRECTORY" \
+              --dry-run \
+              --ignore-conflicts \
+              --ignore-warnings \
+              --test-level="NoTestRun" \
+              -w 1000 \
+              --concise
 
           echo "✅ Metadata deployment validation without tests is successfully completed"
 
         elif [[ "${DEPLOYMENT_MDOE}" == "validateWithTests" ]] ; then
 
-          sf project deploy start -o "$TARGET_ORG_ALIAS" -d "$SOURCE_DIRECTORY" --dry-run --ignore-conflicts --ignore-warnings --test-level="RunLocalTests" -w 1000 --concise
+          sf project deploy start \
+              -o "$TARGET_ORG_ALIAS" \
+              -d "$SOURCE_DIRECTORY" \
+              --dry-run \
+              --ignore-conflicts \
+              --ignore-warnings \
+              --test-level="RunLocalTests" \
+              -w 1000 \
+              --concise
 
           echo "✅ Metadata deployment validation with tests is successfully completed"
 
         else
 
-          sf project deploy start -o "$TARGET_ORG_ALIAS" -d "$SOURCE_DIRECTORY" --ignore-conflicts --ignore-warnings -w 1000 --concise
+          sf project deploy start \
+              -o "$TARGET_ORG_ALIAS" \
+              -d "$SOURCE_DIRECTORY" \
+              --ignore-conflicts \
+              --ignore-warnings \
+              -w 1000 \
+              --concise
 
           echo "✅ Metadata deployment is successfully completed"
 

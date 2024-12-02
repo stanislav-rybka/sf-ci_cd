@@ -61,7 +61,9 @@ runs:
         echo "Analyzer total violations: $ANALYSIS_TOTAL_VIOLATIONS"
 
         if [[ "$FAILURE_MODE_ENABLED" == "true" ]] && \
-           { [[ "$ANALYSIS_EXIT_CODE" -gt 0 ]] || [[ "$ANALYSIS_SEV1_VIOLATIONS" -gt 0 ]] || [[ "$ANALYSIS_TOTAL_VIOLATIONS" -gt "$VIOLATIONS_THRESHOLD" ]]; }; then
+           { [[ "$ANALYSIS_EXIT_CODE" -gt 0 ]] || \
+             [[ "$ANALYSIS_SEV1_VIOLATIONS" -gt 0 ]] || \
+             [[ "$ANALYSIS_TOTAL_VIOLATIONS" -gt "$VIOLATIONS_THRESHOLD" ]]; }; then
           
           echo "❌ Failing the step execution due to reported code analysis violations."
           exit 1
