@@ -44,15 +44,12 @@ runs:
   using: "composite"
 
   steps:
-    - name: "Create Scratch Org"
-      id: createScratchOrg
+    - name: "Authorize DevHub Org"
       shell: bash
       continue-on-error: false
       env:
-          DEVHUB_ORG_SFDX_URL: ${{ inputs.devHubOrgSfdxUrl }}
-          DEVHUB_ORG_ALIAS: "devHub"
-          SCRATCH_ORG_CONFIG_FILE_PATH: ${{ inputs.configFilePath }}
-          LOCAL_SCRATCH_ORG_ALIAS: "scratchOrg"
+        DEVHUB_ORG_SFDX_URL: ${{ inputs.devHubOrgSfdxUrl }}
+        DEVHUB_ORG_ALIAS: "devHub"
       run: |
         echo "⏳ Authorizing to the DevHub environment..."
 
@@ -63,26 +60,37 @@ runs:
         if [[ "$DX_STATUS_CODE" != "0" ]]; then
 
           echo "❌ Cannot log into DevHub"
+          echo "$DX_AUTH_RESPONSE"
           exit 1
 
         fi
 
         echo "✅ Successfully authorized to the DevHub environment"
 
-
+        # adding DevHub related details into variables to re-use in next steps
+        echo "DEVHUB_ORG_ALIAS=$DEVHUB_ORG_ALIAS" >> $GITHUB_ENV
+      
+    - name: "Create Scratch Org"
+      id: createScratchOrg
+      shell: bash
+      continue-on-error: false
+      env:
+          SCRATCH_ORG_CONFIG_FILE_PATH: ${{ inputs.configFilePath }}
+          SCRATCH_ORG_ALIAS: "scratchOrg"
+      run: |
         echo "⏳ Creating a scratch org..."
         echo "Target scratch org configuration file: ${SCRATCH_ORG_CONFIG_FILE_PATH}"
         cat $SCRATCH_ORG_CONFIG_FILE_PATH
 
         # setting scratch org alias at runner's level for other steps. Declaring top-level 'env' attribute does not work for composite actions. 
-        echo "SCRATCH_ORG_ALIAS=$LOCAL_SCRATCH_ORG_ALIAS" >> $GITHUB_ENV
+        echo "SCRATCH_ORG_ALIAS=$SCRATCH_ORG_ALIAS" >> $GITHUB_ENV
 
         SCRATCH_ORG_CREATION_RESPONSE=$(sf org create scratch \
             -f "$SCRATCH_ORG_CONFIG_FILE_PATH" \
             -y ${{ inputs.durationInDays }} \
             -v "$DEVHUB_ORG_ALIAS" \
             -w 60 \
-            -a "$LOCAL_SCRATCH_ORG_ALIAS" \
+            -a "$SCRATCH_ORG_ALIAS" \
             --json)
 
         SCRATCH_ORG_CREATION_STATUS_CODE=$(echo "$SCRATCH_ORG_CREATION_RESPONSE" | jq .status);
@@ -112,7 +120,7 @@ runs:
             -o="$LOCAL_SCRATCH_ORG_ALIAS" \
             --complexity=3 \
             --json)
-            
+
         GENERATED_USER_PASSWORD_STATUS_CODE=$(echo "$GENERATED_USER_PASSWORD_RESPONSE" | jq .status);
 
         if [[ $GENERATED_USER_PASSWORD_STATUS_CODE -eq 0 ]]; then
