@@ -78,6 +78,7 @@ runs:
 
         # printing scanner results into output
         cat "${GITHUB_WORKSPACE}/${REPORT_FILE_NAME}.txt"
+        cat "${GITHUB_WORKSPACE}/${REPORT_FILE_NAME}.txt" >> $GITHUB_STEP_SUMMARY
 
     - name: "Publish Scanner Results Artifact"
       uses: actions/upload-artifact@v4
