@@ -80,7 +80,7 @@ runs:
         ls -l
 
     - name: "Publish Scanner Results Artifact"
-      uses: actions/upload-artifact$v4
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.reportFileName }}
         path: "${{ github.workspace }}/${{ inputs.reportFileName }}.txt"
