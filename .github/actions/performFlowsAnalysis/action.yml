@@ -21,11 +21,6 @@ inputs:
     type: boolean
     default: true
 
-  violationsThreshold:
-    description: "Violations threshold"
-    type: number
-    default: 15
-
   reportFileName:
     description: "Name of a report file containing flows scan results"
     type: string
@@ -78,7 +73,6 @@ runs:
 
         # printing scanner results into output
         cat "${GITHUB_WORKSPACE}/${REPORT_FILE_NAME}.txt"
-        cat "${GITHUB_WORKSPACE}/${REPORT_FILE_NAME}.txt" >> $GITHUB_STEP_SUMMARY
 
     - name: "Publish Scanner Results Artifact"
       uses: actions/upload-artifact@v4
