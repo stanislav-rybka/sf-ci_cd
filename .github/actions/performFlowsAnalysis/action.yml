@@ -9,7 +9,7 @@ inputs:
   failureThresholdLevel:
     description: "Failure threshold level"
     type: choice
-    default: "never"
+    default: "error"
     options:
       - "error"
       - "warning"
