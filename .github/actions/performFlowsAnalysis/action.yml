@@ -79,6 +79,12 @@ runs:
         # TEST: list files
         ls -l
 
+    - name: "Publish Scanner Results Artifact"
+      uses: actions/upload-artifact$v4
+      with:
+        name: ${{ inputs.reportFileName }}
+        path: "${{ github.workspace }}/${{ inputs.reportFileName }}.txt"
+
     - name: "Check Analysis Results"
       shell: bash
       env:
