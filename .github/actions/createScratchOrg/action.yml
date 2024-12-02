@@ -53,13 +53,10 @@ runs:
       run: |
         echo "⏳ Authorizing to the DevHub environment..."
 
-        # temporary disabling immediate exit by using "set +e/-e" commands (i.e. some kind of try/catch)
-        set +e
+        echo $DEVHUB_ORG_SFDX_URL | sf org login sfdx-url --sfdx-url-stdin --json -a "$DEVHUB_ORG_ALIAS"
 
         DX_AUTH_RESPONSE=$(echo $DEVHUB_ORG_SFDX_URL | sf org login sfdx-url --sfdx-url-stdin --json -a "$DEVHUB_ORG_ALIAS");
         DX_STATUS_CODE=$(echo $DX_AUTH_RESPONSE | jq .status);
-
-        set -e
 
         # early exit - error when authorizing to DevHub
         if [[ "$DX_STATUS_CODE" != "0" ]]; then
