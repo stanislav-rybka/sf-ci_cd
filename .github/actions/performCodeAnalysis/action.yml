@@ -1,6 +1,11 @@
 name: "Perform Code Analysis"
 
 inputs:
+  pathToScan:
+    description: "Path to a directory to scan"
+    type: string
+    default: "force-app"
+
   failWhenViolations:
     description: "Fail if violations threshold is exceeded"
     type: boolean
@@ -10,6 +15,11 @@ inputs:
     description: "Violations threshold"
     type: number
     default: 5
+
+  reportFileName:
+    description: "Name of a report file containing code scan results"
+    type: string
+    default: "salesforce-code-analyzer-results"
 
 runs:
   using: "composite"
@@ -32,8 +42,8 @@ runs:
       uses: forcedotcom/run-code-analyzer@v1
       with:
         run-command: run
-        run-arguments: --normalize-severity --target . --outfile results.html
-        results-artifact-name: salesforce-code-analyzer-results
+        run-arguments: --normalize-severity --target "${{ inputs.pathToScan }}" --outfile results.html
+        results-artifact-name: ${{ inputs.reportFileName }}
 
     - name: "Check Analysis Results"
       shell: bash
