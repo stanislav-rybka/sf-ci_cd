@@ -21,10 +21,10 @@ on:
         default: true
 
 jobs:
-  PerformCodeAnalysis:
+  PerformMetadataAnalysis:
     runs-on: ubuntu-latest
     
-    name: "Perform Code Analysis"
+    name: "Perform Metadata Analysis"
 
     steps:
       - name: "Checkout Code"
@@ -42,3 +42,27 @@ jobs:
         uses: ./.github/actions/performFlowsAnalysis
         with:
           failWhenViolations: ${{ github.event_name == 'workflow_dispatch' && !inputs.failWhenAnalysingFlows && 'false' || 'true' }}
+
+  ValidateMetadataDeployment:
+    needs: PerformMetadataAnalysis
+
+    runs-on: ubuntu-latest
+
+    name: "Validate Metadata Deployment"
+
+    env:
+      deploymentMode: "validateWithTests"
+
+    steps:
+      - name: "Checkout Code"
+        uses: actions/checkout@v4
+
+      - name: "Initialize"
+        uses: ./.github/actions/init
+
+      - name: "Validate Deployment"
+        uses: ./.github/actions/deployMetadata
+        with:
+          targetOrgUsername: ${{ secrets.STAGING_ORG_USERNAME }}
+          targetOrgPassword: ${{ secrets.STAGING_ORG_PASSWORD }}
+          deploymentMode: ${{ env.deploymentMode }}
