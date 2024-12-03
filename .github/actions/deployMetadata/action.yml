@@ -38,7 +38,7 @@ runs:
         TARGET_ORG_URL: ${{ inputs.targetOrgUrl }}
         TARGET_ORG_USERNAME: ${{ inputs.targetOrgUsername }}
         TARGET_ORG_PASSWORD: ${{ inputs.targetOrgPassword }}
-        LOCAL_TARGET_ORG_ALIAS: "targetOrg"
+        TARGET_ORG_ALIAS: "targetOrg"
       run: |
         echo "Target Org URL: $TARGET_ORG_URL"
         echo "Target Org Username: $TARGET_ORG_USERNAME"
@@ -54,7 +54,7 @@ runs:
         fi
 
         # setting target org alias at runner's level for other steps. Declaring top-level 'env' attribute does not work for composite actions. 
-        echo "TARGET_ORG_ALIAS=$LOCAL_TARGET_ORG_ALIAS" >> $GITHUB_ENV
+        echo "TARGET_ORG_ALIAS=$TARGET_ORG_ALIAS" >> $GITHUB_ENV
 
         echo "⏳ Authorizing to the target environment..."
 
@@ -64,7 +64,7 @@ runs:
         DX_AUTH_RESPONSE=$(sf sfpowerkit:auth:login \
             -u "$TARGET_ORG_USERNAME" \
             -p "$TARGET_ORG_PASSWORD" \
-            -a "$LOCAL_TARGET_ORG_ALIAS" \
+            -a "$TARGET_ORG_ALIAS" \
             -r "$TARGET_ORG_URL" \
             --json)
 
@@ -89,13 +89,13 @@ runs:
       continue-on-error: false
       env:
           SOURCE_DIRECTORY: "force-app"
-          DEPLOYMENT_MDOE: ${{ inputs.deploymentMode }}
+          DEPLOYMENT_MODE: ${{ inputs.deploymentMode }}
       run: |
         # TODO: profiles reconciliation
 
-        echo "⏳ Deploying metadata with the "$DEPLOYMENT_MDOE" mode..."
+        echo "⏳ Deploying metadata with the "$DEPLOYMENT_MODE" mode..."
 
-        if [[ "${DEPLOYMENT_MDOE}" == "validateOnly" ]] ; then
+        if [[ "${DEPLOYMENT_MODE}" == "validateOnly" ]] ; then
 
           sf project deploy start \
               -o "$TARGET_ORG_ALIAS" \
@@ -109,7 +109,7 @@ runs:
 
           echo "✅ Metadata deployment validation without tests is successfully completed"
 
-        elif [[ "${DEPLOYMENT_MDOE}" == "validateWithTests" ]] ; then
+        elif [[ "${DEPLOYMENT_MODE}" == "validateWithTests" ]] ; then
 
           sf project deploy start \
               -o "$TARGET_ORG_ALIAS" \
