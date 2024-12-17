@@ -92,7 +92,7 @@ function authorizeWithAccessToken {
 # Authorization into SF environment by provided org authorization URL
 # $1 param - target org authorization URL
 # $2 param - target org alias
-function authorizeWithSfdxUrl {
+function authorizeWithAuthUrl {
 
     local TARGET_ORG_AUTH_URL=$1
     local TARGET_ORG_ALIAS=$2
