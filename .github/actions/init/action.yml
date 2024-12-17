@@ -41,7 +41,7 @@ runs:
         PLUGIN_PATH: "/home/runner/.local/share/sf/node_modules/sfpowerkit"
       run: |
         echo "⏳ Installing 'sfpowerkit' plugin if no originally installed version is available ..."
-        (sf plugins | grep -i "sfpowerkit") || (echo "y" | sf plugins install sfpowerkit@$PLUGIN_VERSION)
+        (sf plugins | grep -i "sfpowerkit") || (echo "y" | DEBUG=@oclif/plugin-plugins* npm install sfpowerkit@$PLUGIN_VERSION --omit dev --no-audit --loglevel=notice --no-fund)
 
         echo "⏳ Installing missing 'rimraf' module for sfpowerkit..."
 
