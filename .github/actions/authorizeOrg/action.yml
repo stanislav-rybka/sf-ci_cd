@@ -87,11 +87,7 @@ runs:
               "$TARGET_ORG_ALIAS"
 
         fi
-
-
-        # setting target org alias at runner's level for other steps.
-        # Declaring top-level 'env' attribute does not work for composite actions. 
-        echo "TARGET_ORG_ALIAS=$TARGET_ORG_ALIAS" >> $GITHUB_ENV
+        
 
         # set environment authorization details in outputs
         echo "targetOrgAlias=$TARGET_ORG_ALIAS" >> $GITHUB_OUTPUT
