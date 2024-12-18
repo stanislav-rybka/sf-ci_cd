@@ -65,7 +65,7 @@ runs:
              [[ "$ANALYSIS_SEV1_VIOLATIONS" -gt 0 ]] || \
              [[ "$ANALYSIS_TOTAL_VIOLATIONS" -gt "$VIOLATIONS_THRESHOLD" ]]; }; then
           
-          echo "❌ Failing the step execution due to reported code analysis violations."
+          echo "❌ Failing the step execution due to reported code analysis violations. Please check more details in the summary."
           exit 1
 
         fi
