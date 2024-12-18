@@ -63,6 +63,5 @@ jobs:
       - name: "Validate Deployment"
         uses: ./.github/actions/deployMetadata
         with:
-          targetOrgUsername: ${{ secrets.STAGING_ORG_USERNAME }}
-          targetOrgPassword: ${{ secrets.STAGING_ORG_PASSWORD }}
+          targetOrgAuthUrl: ${{ secrets.STAGING_ORG_AUTH_URL }}
           deploymentMode: ${{ env.deploymentMode }}
