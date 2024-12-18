@@ -34,33 +34,6 @@ runs:
         npm install @salesforce/cli --global
         echo "✅ Salesforce CLI '$(sf version)' is installed successfully."
 
-    - name: "Install Plugin - 'sfdx:sfpowerkit'"
-      shell: bash
-      env:
-        PLUGIN_VERSION: "latest"
-        PLUGIN_PATH: "/home/runner/.local/share/sf/node_modules/sfpowerkit"
-      run: |
-        echo "⏳ Installing 'sfpowerkit' plugin if no originally installed version is available ..."
-        (sf plugins | grep -i "sfpowerkit") || (echo "y" | DEBUG=@oclif/plugin-plugins* npm install sfpowerkit@$PLUGIN_VERSION --omit dev --no-audit --loglevel=notice --no-fund)
-
-        echo "⏳ Installing missing 'rimraf' module for sfpowerkit..."
-
-        if [ -d "$PLUGIN_PATH" ]; then
-
-          cd "$PLUGIN_PATH"
-          npm install rimraf || { echo "❌ Failed to install rimraf module."; exit 1; }
-          echo "✅ 'rimraf' module is installed successfully"
-          cd $GITHUB_WORKSPACE
-
-        else
-
-          echo "❌ 'sfpowerkit' plugin directory is not found: $PLUGIN_PATH"
-          exit 1
-          
-        fi
-
-        echo "✅ 'sfpowerkit' plugin is installed successfully."
-
     - name: "Install Plugin - 'sfdx:sfdmu'"
       shell: bash
       env:
