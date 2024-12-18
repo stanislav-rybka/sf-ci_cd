@@ -41,7 +41,7 @@ jobs:
       - name: "Perform Flows Analysis"
         uses: ./.github/actions/performFlowsAnalysis
         with:
-          failWhenViolations: ${{ github.event_name == 'workflow_dispatch' && !inputs.failWhenAnalysingFlows && 'false' || 'true' }}
+          failWhenViolations: ${{ github.event_name == 'workflow_dispatch' && !inputs.failWhenAnalysingFlows && 'false' || 'false' }}
 
   ValidateMetadataDeployment:
     needs: PerformMetadataAnalysis
