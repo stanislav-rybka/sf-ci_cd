@@ -47,6 +47,9 @@ function authorizeWithCredentials {
     echo ""
     echo "✅ Successfully authorized as '$TARGET_ORG_USERNAME' user"
 
+    # setting target org alias at runner's level for other steps.
+    echo "TARGET_ORG_USERNAME=$TARGET_ORG_USERNAME" >> $GITHUB_ENV
+
 }
 
 
@@ -86,6 +89,9 @@ function authorizeWithAccessToken {
     echo ""
     echo "✅ Successfully authorized as '$TARGET_ORG_USERNAME' user"
 
+    # setting target org alias at runner's level for other steps.
+    echo "TARGET_ORG_USERNAME=$TARGET_ORG_USERNAME" >> $GITHUB_ENV
+
 }
 
 
@@ -118,5 +124,8 @@ function authorizeWithAuthUrl {
 
     echo ""
     echo "✅ Successfully authorized as '$TARGET_ORG_USERNAME' user"
+    
+    # setting target org alias at runner's level for other steps.
+    echo "TARGET_ORG_USERNAME=$TARGET_ORG_USERNAME" >> $GITHUB_ENV
 
 }

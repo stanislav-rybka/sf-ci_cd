@@ -31,11 +31,21 @@ inputs:
     type: string
     default: "none"
 
+outputs:
+  targetOrgAlias:
+    description: "Target environment alias"
+    value: ${{ steps.authorizeTargetOrg.outputs.targetOrgAlias }}
+
+  targetOrgUsername:
+    description: "Target environment username"
+    value: ${{ steps.authorizeTargetOrg.outputs.targetOrgUsername }}
+
 runs:
   using: "composite"
 
   steps:
     - name: "Authorize Target Org"
+      id: authorizeTargetOrg
       shell: bash
       env:
         AUTH_UTILS_SCRIPT_PATH: "scripts/bash/utils/sf_authorization.sh"
@@ -82,3 +92,7 @@ runs:
         # setting target org alias at runner's level for other steps.
         # Declaring top-level 'env' attribute does not work for composite actions. 
         echo "TARGET_ORG_ALIAS=$TARGET_ORG_ALIAS" >> $GITHUB_ENV
+
+        # set environment authorization details in outputs
+        echo "targetOrgAlias=$TARGET_ORG_ALIAS" >> $GITHUB_OUTPUT
+        echo "targetOrgUsername=$TARGET_ORG_USERNAME" >> $GITHUB_OUTPUT
