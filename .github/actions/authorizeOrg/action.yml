@@ -57,7 +57,7 @@ runs:
         TARGET_ORG_AUTH_URL: ${{ inputs.targetOrgAuthUrl }}
       run: |
         # load functions to authorize SF environment in different ways
-        source $(AUTH_UTILS_SCRIPT_PATH)
+        source "${AUTH_UTILS_SCRIPT_PATH}"
 
 
         # check if target org credentials are provided
