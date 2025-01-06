@@ -63,7 +63,7 @@ jobs:
         id: createScratchOrg
         uses: ./.github/actions/createScratchOrg
         with:
-          devHubOrgSfdxUrl: ${{ secrets.DEVHUB_ORG_SFDX_URL }}
+          devHubOrgSfdxUrl: ${{ secrets.DEVHUB_ORG_AUTH_URL }}
           durationInDays: ${{ inputs.scratchOrgDurationInDays }}
 
       - name: "Assign Target Org Credentials"
