@@ -142,6 +142,8 @@ runs:
 
         SCRATCH_ORG_DETAILS_STATUS_CODE=$(echo "$SCRATCH_ORG_DETAILS" | jq .status)
 
+        echo #SCRATCH_ORG_DETAILS
+
         # early exit - error when getting scratch org details
         if [[ "$SCRATCH_ORG_DETAILS_STATUS_CODE" != "0" ]]; then
 
@@ -151,6 +153,8 @@ runs:
         fi
 
         SCRATCH_ORG_AUTH_URL=$(echo "$SCRATCH_ORG_DETAILS" | jq -r '.result.sfdxAuthUrl')
+
+        echo "$SCRATCH_ORG_AUTH_URL"
 
         # set scratch org authorization URL in output
         echo "scratchOrgAuthUrl=$SCRATCH_ORG_AUTH_URL" >> $GITHUB_OUTPUT
