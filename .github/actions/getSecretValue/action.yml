@@ -21,7 +21,6 @@ runs:
       env:
         SECRET_NAME: {{ inputs.secretName }}
       run: |
-        #SECRET_VALUE=${{ secrets[env.SECRET_NAME] }}
         SECRET_VALUE=$(eval echo "\${{ secrets.${{ inputs.secretName }} }}")
 
         if [ -z "$SECRET_VALUE" ]; then
