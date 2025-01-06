@@ -32,19 +32,6 @@ jobs:
       
       - name: "Initialize"
         uses: ./.github/actions/init
-
-      - name: "Test: Direct Secret Value Retrieve"
-        env:
-          SECRET_NAME: "STAGING_ORG_AUTH_URL"
-        run: |
-          SECRET_VALUE="${{ secrets[env.SECRET_NAME] }}"
-
-          echo "Retrieved secret value: $SECRET_VALUE"
-
-      - name: "Test: Get Secret Value"
-        uses: ./.github/actions/getSecretValue
-        with:
-          secretName: "STAGING_ORG_AUTH_URL"
       
       - name: "Create Scratch Org"
         uses: ./.github/actions/createScratchOrg
