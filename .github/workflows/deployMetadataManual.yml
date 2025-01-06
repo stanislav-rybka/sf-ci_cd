@@ -70,6 +70,8 @@ jobs:
         run: |
           if [[ "${{ inputs.shouldCreateScratchOrg }}" =~ ^[Tt]rue$ ]] ; then
 
+            echo "Generated scratch org auth URL: '${{ steps.createScratchOrg.outputs.scratchOrgAuthUrl }}'"
+
             echo "TARGET_ORG_AUTH_URL=${{ steps.createScratchOrg.outputs.scratchOrgAuthUrl }}" >> $GITHUB_ENV
 
           else

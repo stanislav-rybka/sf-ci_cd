@@ -142,7 +142,7 @@ runs:
 
         SCRATCH_ORG_DETAILS_STATUS_CODE=$(echo "$SCRATCH_ORG_DETAILS" | jq .status)
 
-        echo #SCRATCH_ORG_DETAILS
+        echo $SCRATCH_ORG_DETAILS
 
         # early exit - error when getting scratch org details
         if [[ "$SCRATCH_ORG_DETAILS_STATUS_CODE" != "0" ]]; then
