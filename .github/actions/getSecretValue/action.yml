@@ -1,0 +1,33 @@
+name: "Get Secret Value"
+description: "Retrieve a secret value by its name"
+
+inputs:
+  secretName:
+    description: "The name of the secret to retrieve"
+    required: true
+
+outputs:
+  secretValue:
+    description: "The value of the retrieved secret"
+    value: ${{ steps.authorizeTargetOrg.outputs.targetOrgAlias }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Retrieve Secret"
+      id: retrieveSecret
+      shell: bash
+      env:
+        SECRET_NAME: {{ inputs.secretName }}
+      run: |
+        SECRET_VALUE="${{ secrets["$SECRET_NAME"] }}"
+
+        if [ -z "$SECRET_VALUE" ]; then
+          echo "❌ Secret not found: $SECRET_NAME"
+          exit 1
+        fi
+
+        echo "✅ Retrieved secret value: $SECRET_VALUE"
+
+        # set secret value in output
+        echo "secretValue=$SECRET_VALUE" >> $GITHUB_OUTPUT
