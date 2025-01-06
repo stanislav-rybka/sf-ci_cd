@@ -4,6 +4,7 @@ description: "Retrieve a secret value by its name"
 inputs:
   secretName:
     description: "The name of the secret to retrieve"
+    type: string
     required: true
 
 outputs:
