@@ -9,10 +9,11 @@ inputs:
 outputs:
   secretValue:
     description: "The value of the retrieved secret"
-    value: ${{ steps.authorizeTargetOrg.outputs.targetOrgAlias }}
+    value: ${{ steps.retrieveSecret.outputs.secretValue }}
 
 runs:
   using: "composite"
+  
   steps:
     - name: "Retrieve Secret"
       id: retrieveSecret
