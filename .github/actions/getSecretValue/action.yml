@@ -22,7 +22,6 @@ runs:
         SECRET_NAME: {{ inputs.secretName }}
       run: |
         SECRET_VALUE=(echo "$SECRET_NAME")
-        # SECRET_VALUE=$(eval echo "\${{ secrets.${{ inputs.secretName }} }}")
 
         if [ -z "$SECRET_VALUE" ]; then
           echo "❌ Secret not found: $SECRET_NAME"
