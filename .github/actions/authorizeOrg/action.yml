@@ -64,6 +64,8 @@ runs:
         if [[ ${TARGET_ORG_USERNAME:+1} && "$TARGET_ORG_USERNAME" != "none" && \
               ${TARGET_ORG_PASSWORD:+1} && "$TARGET_ORG_PASSWORD" != "none" ]] ; then
 
+          echo "⏳ Trying to authorize with provided target org username and password..."
+
           authorizeWithCredentials \
               "$TARGET_ORG_USERNAME" \
               "$TARGET_ORG_PASSWORD" \
@@ -73,6 +75,8 @@ runs:
         # check if target org authorization URL is provided
         elif [[ ${TARGET_ORG_AUTH_URL:+1} && "$TARGET_ORG_AUTH_URL" != "none" ]] ; then
 
+          echo "⏳ Trying to authorize with provided target org authorization URL..."
+
           authorizeWithAuthUrl \
               "$TARGET_ORG_AUTH_URL" \
               "$TARGET_ORG_ALIAS"
@@ -81,10 +85,16 @@ runs:
         elif [[ ${TARGET_ORG_ACCESS_TOKEN:+1} && "$TARGET_ORG_ACCESS_TOKEN" != "none" && \
                 ${TARGET_ORG_URL:+1} && "$TARGET_ORG_URL" != "none" ]] ; then
 
+          echo "⏳ Trying to authorize with provided target org access token..."
+
           authorizeWithAccessToken \
               "$TARGET_ORG_ACCESS_TOKEN" \
               "$TARGET_ORG_URL" \
               "$TARGET_ORG_ALIAS"
+
+        else
+
+          echo "🚩 None of valid authorization params are provided. Authorization is not performed."
 
         fi
         
