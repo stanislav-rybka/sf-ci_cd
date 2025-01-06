@@ -4,18 +4,8 @@ run-name: "Deploy Metadata Manual (${{ github.actor }})"
 on:
   workflow_dispatch:
     inputs:
-      targetOrgUrl:
-        description: "Target environment login URL"
-        type: string
-        default: "https://login.salesforce.com"
-
-      targetOrgUsername: 
-        description: "Target environment username"
-        type: string
-        default: "none"
-
-      targetOrgPassword:
-        description: "Target environment password"
+      targetOrgAuthFileName:
+        description: "Target environment authorization file name"
         type: string
         default: "none"
 
@@ -58,9 +48,8 @@ jobs:
     name: "Deploy Metadata"
 
     env:
-      TARGET_ORG_URL: ${{ inputs.targetOrgUrl }}
-      TARGET_ORG_USERNAME: ${{ inputs.targetOrgUsername }}
-      TARGET_ORG_PASSWORD: ${{ inputs.targetOrgPassword }}
+      TARGET_ORG_AUTH_FILE_NAME: ${{ inputs.targetOrgAuthFileName }}
+      TARGET_ORG_AUTH_URL: ""
 
     steps:
       - name: "Checkout Code"
@@ -81,16 +70,25 @@ jobs:
         run: |
           if [[ "${{ inputs.shouldCreateScratchOrg }}" =~ ^[Tt]rue$ ]] ; then
 
-            echo "TARGET_ORG_URL=${{ steps.createScratchOrg.outputs.scratchOrgUrl }}" >> $GITHUB_ENV
-            echo "TARGET_ORG_USERNAME=${{ steps.createScratchOrg.outputs.scratchOrgUsername }}" >> $GITHUB_ENV
-            echo "TARGET_ORG_PASSWORD=${{ steps.createScratchOrg.outputs.scratchOrgPassword }}" >> $GITHUB_ENV
+            echo "TARGET_ORG_AUTH_URL=${{ steps.createScratchOrg.outputs.scratchOrgAuthUrl }}" >> $GITHUB_ENV
+
+          else
+
+            TARGET_ORG_AUTH_URL="${{ secrets[env.TARGET_ORG_AUTH_FILE_NAME] }}"
+
+            if [ -z "$TARGET_ORG_AUTH_URL" ]; then
+
+              echo "❌ Target org authorization file not found: $TARGET_ORG_AUTH_FILE_NAME"
+              exit 1
+
+            fi
+
+            echo "TARGET_ORG_AUTH_URL=$TARGET_ORG_AUTH_URL" >> $GITHUB_ENV
 
           fi
 
       - name: "Deploy Metadata"
         uses: ./.github/actions/deployMetadata
         with:
-          targetOrgUrl: ${{ env.TARGET_ORG_URL }}
-          targetOrgUsername: ${{ env.TARGET_ORG_USERNAME }}
-          targetOrgPassword: ${{ env.TARGET_ORG_PASSWORD }}
+          targetOrgAuthUrl: ${{ env.TARGET_ORG_AUTH_URL }}
           deploymentMode: ${{ inputs.deploymentMode }}

@@ -40,6 +40,10 @@ outputs:
     description: "Password of the created scratch org"
     value: ${{ steps.createScratchOrg.outputs.scratchOrgPassword }}
 
+  scratchOrgAuthUrl:
+    description: "Authorization URL of the created scratch org"
+    value: ${{ steps.createScratchOrg.outputs.scratchOrgAuthUrl }}
+
 runs:
   using: "composite"
 
@@ -128,6 +132,31 @@ runs:
         echo "URL: $SCRATCH_ORG_URL" >> $GITHUB_STEP_SUMMARY
         echo "Username: $SCRATCH_ORG_USERNAME" >> $GITHUB_STEP_SUMMARY
         echo "Password: $SCRATCH_ORG_PASSWORD" >> $GITHUB_STEP_SUMMARY
+
+    - name: "Get Scratch Org Authorization URL"
+      shell: bash
+      run: |
+        echo "⏳ Retrieving scratch org authorization URL..."
+
+        SCRATCH_ORG_DETAILS=$(sf org display --target-org "$SCRATCH_ORG_ALIAS" --verbose --json)
+
+        SCRATCH_ORG_DETAILS_STATUS_CODE=$(echo "$SCRATCH_ORG_DETAILS" | jq .status)
+
+        # early exit - error when getting scratch org details
+        if [[ "$SCRATCH_ORG_DETAILS_STATUS_CODE" != "0" ]]; then
+
+          echo "❌ Problem when getting '$SCRATCH_ORG_ALIAS' scratch org details"
+          exit 1
+
+        fi
+
+        SCRATCH_ORG_AUTH_URL=$(echo "$SCRATCH_ORG_DETAILS" | jq -r '.result.sfdxAuthUrl')
+
+        # set scratch org authorization URL in output
+        echo "scratchOrgAuthUrl=$SCRATCH_ORG_AUTH_URL" >> $GITHUB_OUTPUT
+
+        echo ""
+        echo "✅ Successfully retrieved '$SCRATCH_ORG_ALIAS' scratch org authorization URL"
 
     - name: "Set Profiles Login IP Ranges"
       shell: bash
