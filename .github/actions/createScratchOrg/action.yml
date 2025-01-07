@@ -91,6 +91,7 @@ runs:
         if [[ "$SCRATCH_ORG_CREATION_STATUS_CODE" != "0" ]]; then
 
           echo "❌ Problem when creating the scratch org"
+          echo "$SCRATCH_ORG_CREATION_RESPONSE" | jq .
           exit 1
 
         fi
@@ -144,19 +145,20 @@ runs:
       run: |
         echo "⏳ Retrieving scratch org authorization URL..."
 
-        SCRATCH_ORG_DETAILS=$(sf org display --target-org "$SCRATCH_ORG_ALIAS" --verbose --json)
+        SCRATCH_ORG_DETAILS_RESPONSE=$(sf org display --target-org "$SCRATCH_ORG_ALIAS" --verbose --json)
 
-        SCRATCH_ORG_DETAILS_STATUS_CODE=$(echo "$SCRATCH_ORG_DETAILS" | jq .status)
+        SCRATCH_ORG_DETAILS_STATUS_CODE=$(echo "$SCRATCH_ORG_DETAILS_RESPONSE" | jq .status)
 
         # early exit - error when getting scratch org details
         if [[ "$SCRATCH_ORG_DETAILS_STATUS_CODE" != "0" ]]; then
 
           echo "❌ Problem when getting '$SCRATCH_ORG_ALIAS' scratch org details"
+          echo "$SCRATCH_ORG_DETAILS_RESPONSE" | jq .
           exit 1
 
         fi
 
-        SCRATCH_ORG_AUTH_URL=$(echo "$SCRATCH_ORG_DETAILS" | jq -r '.result.sfdxAuthUrl')
+        SCRATCH_ORG_AUTH_URL=$(echo "$SCRATCH_ORG_DETAILS_RESPONSE" | jq -r '.result.sfdxAuthUrl')
 
         # set scratch org authorization URL in output
         echo "scratchOrgAuthUrl=$SCRATCH_ORG_AUTH_URL" >> $GITHUB_OUTPUT
