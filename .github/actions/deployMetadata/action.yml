@@ -81,6 +81,7 @@ runs:
               -d "$SOURCE_DIRECTORY" \
               --ignore-conflicts \
               --ignore-warnings \
+              --test-level="RunLocalTests" \
               -w 1000 \
               --concise
 
