@@ -1,0 +1,58 @@
+name: "Deploy Pull Request"
+run-name: "Deploy Pull Request (${{ github.actor }})"
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+      - dev
+
+jobs:
+  PerformMetadataAnalysis:
+    runs-on: ubuntu-latest
+    
+    name: "Perform Metadata Analysis"
+
+    steps:
+      - name: "Checkout Code"
+        uses: actions/checkout@v4
+      
+      - name: "Initialize"
+        uses: ./.github/actions/init
+
+      - name: "Perform Code Analysis"
+        uses: ./.github/actions/performCodeAnalysis
+        with:
+          failWhenViolations: true
+
+      - name: "Perform Flows Analysis"
+        uses: ./.github/actions/performFlowsAnalysis
+        with:
+          failWhenViolations: false
+
+  DeployMetadata:
+    needs: PerformMetadataAnalysis
+
+    runs-on: ubuntu-latest
+
+    name: "Deploy Metadata"
+
+    env:
+      DEPLOYMENT_MODE: "install"
+
+    steps:
+      - name: "Checkout Code"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: "Initialize"
+        uses: ./.github/actions/init
+
+      - name: "Validate Deployment"
+        uses: ./.github/actions/deployMetadata
+        with:
+          targetOrgAuthUrl: ${{ secrets.STAGING_ORG_AUTH_URL }}
+          deploymentMode: ${{ env.DEPLOYMENT_MODE }}
+          deltaDeployment: true
