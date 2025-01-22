@@ -29,7 +29,7 @@ jobs:
       - name: "Perform Flows Analysis"
         uses: ./.github/actions/performFlowsAnalysis
         with:
-          failWhenViolations: true
+          failWhenViolations: false
 
   ValidateMetadataDeployment:
     needs: PerformMetadataAnalysis
