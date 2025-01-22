@@ -55,3 +55,4 @@ jobs:
         with:
           targetOrgAuthUrl: ${{ secrets.STAGING_ORG_AUTH_URL }}
           deploymentMode: ${{ env.DEPLOYMENT_MODE }}
+          deltaDeployment: true
