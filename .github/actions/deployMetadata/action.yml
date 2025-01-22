@@ -131,7 +131,10 @@ runs:
         # TODO: profiles reconciliation
 
         echo "⏳ Deploying only modified metadata with the "$DEPLOYMENT_MODE" mode..."
+
+        HEAD_SHA=(git rev-parse HEAD)
         echo ">>> Target delta compare branch: $TARGET_DELTA_COMPARE_BRANCH"
+        echo ">>> HEAD commit SHA: $HEAD_SHA"
 
         # generate package.xml and destructiveChanges.xml files containing only modified (i.e. delta) files
         sf sgd source delta -o "." --to "HEAD" --from "$TARGET_DELTA_COMPARE_BRANCH" --ignore-whitespace
