@@ -147,11 +147,14 @@ runs:
 
         fi
 
+        # TODO: add more convenient way to show what items are to be deployed/deleted (e.g. post to step summary, etc.)
         echo "👀 List of metadata to be deployed..."
-        cat $DEPLOY_MANIFEST_PATH
+        grep -oP '(?<=<members>)(.*?)(?=</members>)' "$DEPLOY_MANIFEST_PATH"
 
+        echo ""
         echo "👀 List of metadata to be removed..."
-        cat $DESTRUCTIVE_MANIFEST_PATH
+        grep -oP '(?<=<members>)(.*?)(?=</members>)' "$DESTRUCTIVE_MANIFEST_PATH"
+
 
         if [[ "${DEPLOYMENT_MODE}" == "validateOnly" ]] ; then
 
