@@ -8,18 +8,6 @@ on:
       - main
       - dev
 
-  workflow_dispatch:
-    inputs:
-      failWhenAnalysingCode:
-        description: "Fail when running code analysis?"
-        type: boolean
-        default: true
-
-      failWhenAnalysingFlows:
-        description: "Fail when running flows analysis?"
-        type: boolean
-        default: true
-
 jobs:
   PerformMetadataAnalysis:
     runs-on: ubuntu-latest
@@ -36,12 +24,12 @@ jobs:
       - name: "Perform Code Analysis"
         uses: ./.github/actions/performCodeAnalysis
         with:
-          failWhenViolations: ${{ github.event_name == 'workflow_dispatch' && !inputs.failWhenAnalysingCode && 'false' || 'true' }}
+          failWhenViolations: true
 
       - name: "Perform Flows Analysis"
         uses: ./.github/actions/performFlowsAnalysis
         with:
-          failWhenViolations: ${{ github.event_name == 'workflow_dispatch' && !inputs.failWhenAnalysingFlows && 'false' || 'false' }}
+          failWhenViolations: true
 
   ValidateMetadataDeployment:
     needs: PerformMetadataAnalysis
@@ -51,11 +39,13 @@ jobs:
     name: "Validate Metadata Deployment"
 
     env:
-      deploymentMode: "validateWithTests"
+      DEPLOYMENT_MODE: "validateWithTests"
 
     steps:
       - name: "Checkout Code"
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: "Initialize"
         uses: ./.github/actions/init
@@ -64,4 +54,4 @@ jobs:
         uses: ./.github/actions/deployMetadata
         with:
           targetOrgAuthUrl: ${{ secrets.STAGING_ORG_AUTH_URL }}
-          deploymentMode: ${{ env.deploymentMode }}
+          deploymentMode: ${{ env.DEPLOYMENT_MODE }}
