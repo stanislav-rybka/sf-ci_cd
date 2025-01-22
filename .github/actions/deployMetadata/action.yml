@@ -120,7 +120,7 @@ runs:
       env:
           DEPLOYMENT_MODE: ${{ inputs.deploymentMode }}
           TARGET_ORG_ALIAS: ${{ steps.authorizeTargetOrg.outputs.targetOrgAlias }}
-          TARGET_COMPARE_BRANCH: "dev"
+          TARGET_COMPARE_BRANCH: "origin/dev"
           DEPLOY_MANIFEST_PATH: "package/package.xml"
           DESTRUCTIVE_MANIFEST_PATH: "destructiveChanges/destructiveChanges.xml"
       run: |
@@ -129,7 +129,7 @@ runs:
         echo "⏳ Deploying only modified metadata with the "$DEPLOYMENT_MODE" mode..."
 
         # generate package.xml and destructiveChanges.xml files containing only modified (i.e. delta) files
-        sf sgd source delta --to "HEAD" --from "$TARGET_COMPARE_BRANCH" --output-dir .
+        sf sgd source delta -o "." --to "HEAD" --from "$TARGET_COMPARE_BRANCH"
 
         # Check if the command was successful
         if [ $? -ne 0 ]; then
