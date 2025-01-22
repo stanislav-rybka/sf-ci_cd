@@ -40,6 +40,7 @@ jobs:
 
     env:
       DEPLOYMENT_MODE: "install"
+      TARGET_DELTA_COMPARE_BRANCH: ${{ github.sha }}
 
     steps:
       - name: "Checkout Code"
@@ -56,3 +57,4 @@ jobs:
           targetOrgAuthUrl: ${{ secrets.STAGING_ORG_AUTH_URL }}
           deploymentMode: ${{ env.DEPLOYMENT_MODE }}
           deltaDeployment: true
+          targetDeltaCompareBranch: ${{ env.TARGET_DELTA_COMPARE_BRANCH }}
