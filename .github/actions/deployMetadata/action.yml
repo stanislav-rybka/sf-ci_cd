@@ -147,6 +147,12 @@ runs:
 
         fi
 
+        echo "👀 List of metadata to be deployed..."
+        cat $DEPLOY_MANIFEST_PATH
+
+        echo "👀 List of metadata to be removed..."
+        cat $DESTRUCTIVE_MANIFEST_PATH
+
         if [[ "${DEPLOYMENT_MODE}" == "validateOnly" ]] ; then
 
           sf project deploy start \
