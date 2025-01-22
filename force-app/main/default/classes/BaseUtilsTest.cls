@@ -15,6 +15,7 @@ private with sharing class BaseUtilsTest {
             true,
             'Expected asset statement to pass.'
         );
+        
 
     }
 

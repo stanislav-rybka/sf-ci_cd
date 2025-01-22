@@ -1,2 +1,6 @@
 .THIS {
 }
+
+p > small {
+    color: red;
+}
