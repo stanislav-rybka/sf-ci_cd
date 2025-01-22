@@ -134,8 +134,8 @@ runs:
 
         # generate package.xml and destructiveChanges.xml files containing only modified (i.e. delta) files
         # this approach works when merge is squashed. Otherwise, try to incorporate another way to get "from" value
-        # ... --from "$(git merge-base HEAD $TARGET_COMPARE_BRANCH)"
-        sf sgd source delta -o "." --to "HEAD" --from "$TARGET_DELTA_COMPARE_BRANCH" --ignore-whitespace
+        # ... --from "$(git merge-base HEAD $TARGET_DELTA_COMPARE_BRANCH)"
+        sf sgd source delta -o "." --to "HEAD" --from "$(git merge-base HEAD $TARGET_DELTA_COMPARE_BRANCH)" --ignore-whitespace
 
         # Check if the command was successful
         if [ $? -ne 0 ]; then
