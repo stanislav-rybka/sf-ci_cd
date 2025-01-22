@@ -129,7 +129,7 @@ runs:
         echo "⏳ Deploying only modified metadata with the "$DEPLOYMENT_MODE" mode..."
 
         # generate package.xml and destructiveChanges.xml files containing only modified (i.e. delta) files
-        sf sgd source delta --to "HEAD" --from "$TARGET_COMPARE_BRANCH" --output-dir .
+        sf sgd source delta --to "HEAD" --from "$TARGET_COMPARE_BRANCH" --output-dir "."
 
         # Check if the command was successful
         if [ $? -ne 0 ]; then
