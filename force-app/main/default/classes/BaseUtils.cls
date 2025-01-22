@@ -2,7 +2,7 @@ public with sharing class BaseUtils {
     
     public static void debug(String message) {
         System.debug(message);
-        System.debug('another change 1');
+        System.debug('another change 2');
     }
 
 }
