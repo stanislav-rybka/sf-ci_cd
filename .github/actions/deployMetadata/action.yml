@@ -82,6 +82,7 @@ runs:
               --ignore-warnings \
               --test-level="RunLocalTests" \
               -w 1000 \
+              --junit \
               --concise
 
           echo "✅ Metadata deployment validation with tests is successfully completed"
@@ -95,6 +96,7 @@ runs:
               --ignore-warnings \
               --test-level="RunLocalTests" \
               -w 1000 \
+              --junit \
               --concise
 
           echo "✅ Metadata deployment is successfully completed"
@@ -156,7 +158,6 @@ runs:
               --ignore-warnings \
               --test-level="NoTestRun" \
               -w 1000 \
-              --concise
 
           echo "✅ Metadata deployment validation without tests is successfully completed"
 
@@ -171,6 +172,7 @@ runs:
               --ignore-warnings \
               --test-level="RunLocalTests" \
               -w 1000 \
+              --junit \
               --concise
 
           echo "✅ Metadata deployment validation with tests is successfully completed"
@@ -185,6 +187,7 @@ runs:
               --ignore-warnings \
               --test-level="RunLocalTests" \
               -w 1000 \
+              --junit \
               --concise
 
           echo "✅ Metadata deployment is successfully completed"
