@@ -120,7 +120,7 @@ runs:
       env:
           DEPLOYMENT_MODE: ${{ inputs.deploymentMode }}
           TARGET_ORG_ALIAS: ${{ steps.authorizeTargetOrg.outputs.targetOrgAlias }}
-          TARGET_COMPARE_BRANCH: "dev"
+          TARGET_COMPARE_BRANCH: "origin/dev"
           DEPLOY_MANIFEST_PATH: "package/package.xml"
           DESTRUCTIVE_MANIFEST_PATH: "destructiveChanges/destructiveChanges.xml"
       run: |
