@@ -1,6 +1,6 @@
 .THIS {
 }
 
-p > small {
+.test-class {
     color: red;
 }
